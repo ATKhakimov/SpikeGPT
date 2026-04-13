@@ -53,7 +53,7 @@ class TrainerConfig:
 
 class Trainer:
 
-    def __init__(self, model, train_dataset, valid_dataset, test_dataset, config):
+    def __init__(self, model, train_dataset, valid_dataset, test_dataset, config, resume_from=None):
         self.model = model
         self.train_dataset = train_dataset
         self.test_dataset = test_dataset
@@ -63,6 +63,8 @@ class Trainer:
         self.min_dev_loss = 100
         self.dev_loss = -1
         self.steps = 0
+        self.start_epoch = 0
+        self.resume_from = resume_from
 
         #         if 'wandb' in sys.modules:
         #             cfg = model.config
@@ -89,6 +91,23 @@ class Trainer:
         optimizer = raw_model.configure_optimizers(config)
         optimizer = accelerator.prepare(optimizer)
         model = accelerator.prepare(model)
+
+        # Resume from checkpoint if specified
+        if self.resume_from and os.path.exists(self.resume_from):
+            print(f'Resuming from checkpoint: {self.resume_from}')
+            checkpoint = torch.load(self.resume_from, map_location='cpu')
+            unwrapped_model = accelerator.unwrap_model(model)
+            unwrapped_model.load_state_dict(checkpoint)
+            # Parse epoch number from filename (e.g. spikegpt-ru-181.pth → 181)
+            basename = os.path.basename(self.resume_from)
+            try:
+                epoch_str = basename.replace('spikegpt-ru-', '').replace('.pth', '')
+                self.start_epoch = int(epoch_str)
+                print(f'  Resuming from epoch {self.start_epoch}, will start at epoch {self.start_epoch + 1}')
+            except:
+                print(f'  Could not parse epoch from filename, starting from 0')
+        elif self.resume_from:
+            print(f'WARNING: Checkpoint not found: {self.resume_from}')
 
         def run_epoch(split):
             is_train = split == 'train'
@@ -178,17 +197,20 @@ class Trainer:
                 self.dev_loss = dev_loss_all / len(loader)
 
         self.tokens = 0  # counter used for learning rate decay
-        for epoch in range(config.max_epochs):
+        for epoch in range(self.start_epoch, config.max_epochs):
             save_flag = False
 
             run_epoch('train')
             log_file.write(
-                f'{epoch + 1} {self.avg_loss:.6f} {math.exp(self.avg_loss):.4f} {self.lr:.8f} {datetime.datetime.now()} \n')
+                f'{epoch + 1} train {self.avg_loss:.6f} {math.exp(self.avg_loss):.4f} {self.lr:.8f} {datetime.datetime.now()} \n')
             log_file.flush()
-#             run_epoch('valid')
-#             log_file.write(
-#                 f'{epoch + 1} {self.dev_loss:.6f} {math.exp(self.dev_loss):.4f} {self.lr:.8f} {datetime.datetime.now()} \n')
-#             log_file.flush()
+
+            if self.valid_dataset is not None and (epoch + 1) % 5 == 0:
+                run_epoch('valid')
+                log_file.write(
+                    f'{epoch + 1} valid {self.dev_loss:.6f} {math.exp(self.dev_loss):.4f} {self.lr:.8f} {datetime.datetime.now()} \n')
+                log_file.flush()
+                logger.info(f'Epoch {epoch + 1} | train_ppl={math.exp(self.avg_loss):.2f} | val_ppl={math.exp(self.dev_loss):.2f}')
             #             run_epoch('test')
             #             log_file.write(
             #                 f'{epoch+1} {self.dev_loss:.6f} {math.exp(self.dev_loss):.4f} {self.lr:.8f} {datetime.datetime.now()} \n')

@@ -1,0 +1,35 @@
+# Data
+data/
+tokenizer/
+
+# Checkpoints
+checkpoints/
+*.pth
+
+# Logs
+*.txt
+!requirements*.txt
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# CUDA build artifacts
+*.so
+*.o
+*.a
+
+# Env
+.env
+*.env
+
+# OS
+.DS_Store
+Thumbs.db
