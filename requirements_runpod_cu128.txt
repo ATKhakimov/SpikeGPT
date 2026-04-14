@@ -1,0 +1,22 @@
+# RunPod / CUDA 12.8 / PyTorch 2.8 environment for ru_finetuning
+# Usage:
+#   python -m venv .venv
+#   source .venv/bin/activate
+#   pip install -r ru_finetuning/requirements_runpod_cu128.txt
+
+--index-url https://download.pytorch.org/whl/cu128
+--extra-index-url https://pypi.org/simple
+
+torch==2.8.0
+torchvision==0.23.0
+torchaudio==2.8.0
+cupy-cuda12x==14.0.1
+accelerate>=0.34,<2
+transformers>=4.45,<5
+datasets>=2.20,<4
+numpy>=1.26,<3
+tqdm>=4.66,<5
+scipy>=1.13,<2
+matplotlib>=3.9,<4
+ninja>=1.11,<2
+tensorboard>=2.17,<3

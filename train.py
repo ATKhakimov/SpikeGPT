@@ -19,29 +19,29 @@ torch.backends.cuda.matmul.allow_tf32 = True
 ### Step 1: set training data ##########################################################################
 
 datafile_train = "data/ru_train_full.npy"
-os.environ['VOCAB_SIZE'] = '50257'  # rugpt3large / GPT-2 vocab
+os.environ['VOCAB_SIZE'] = '50258'  # rugpt3large fast tokenizer vocab
 
 ### Step 2: set model size #############################################################################
 
 ctx_len = 1024
-n_layer = 6
-n_embd  = 384  # n_layer=6, n_embd=384 → ~50M params with vocab=50257
+n_layer = 12
+n_embd  = 512  # n_layer=12, n_embd=512 → ~100M params with vocab=50257
 
 # 'RWKV' (better for char-level English) or 'RWKV-ffnPre' (better in some cases)
 model_type = 'RWKV'
 
 ### Step 3: set batch size #############################################################################
 
-# RTX 5090 (32 GB VRAM): ~50M model fits comfortably at batch 64
+# A100 80GB: 100M model fits comfortably at batch 32
 # batch_size must be divisible by B_GROUP_FORWARD and B_GROUP_BACKWARD in model.py
-batch_size = 16
+batch_size = 32
 
 ### Step 4: set learning rate, training mini-epochs ####################################################
 
 lr_init = 6e-4
 lr_final = 1e-5
 # each mini-epoch = epoch_length_fixed random samples of length ctx_len
-n_epoch = 1000
+n_epoch = 350  # 350 × 10.24M = ~3.58B tokens
 # 0 = never, 1 = every mini-epoch, 2 = every two mini-epochs, etc.
 epoch_save_frequency = 10
 epoch_save_path = 'checkpoints/spikegpt-ru-'
@@ -51,7 +51,8 @@ epoch_length_fixed = 10000
 # Resume from last checkpoint if available
 resume_from = None
 import glob
-checkpoint_files = sorted(glob.glob('checkpoints/spikegpt-ru-*.pth'))
+checkpoint_files = sorted(glob.glob('checkpoints/spikegpt-ru-*.pth'),
+                          key=lambda p: int(os.path.splitext(os.path.basename(p))[0].split('-')[-1]))
 if checkpoint_files:
     resume_from = checkpoint_files[-1]
     print(f'Found latest checkpoint: {resume_from}')

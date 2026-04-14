@@ -196,7 +196,12 @@ class Trainer:
             if not is_train:
                 self.dev_loss = dev_loss_all / len(loader)
 
-        self.tokens = 0  # counter used for learning rate decay
+        # Restore token counter so lr scheduler continues from where it left off
+        if self.start_epoch > 0:
+            self.tokens = self.start_epoch * config.final_tokens // config.max_epochs
+            print(f'  Restored token counter to {self.tokens:,} (epoch {self.start_epoch}/{config.max_epochs})')
+        else:
+            self.tokens = 0
         for epoch in range(self.start_epoch, config.max_epochs):
             save_flag = False
 

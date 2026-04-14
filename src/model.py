@@ -297,6 +297,86 @@ class RWKV_ChannelMix(torch.jit.ScriptModule):
 ########################################################################################################
 
 
+class _ATanSurrogate(torch.autograd.Function):
+    """
+    Hard spike in forward pass, ATan surrogate gradient in backward pass.
+    Identical to the surrogate used in spikingjelly's ATan class (alpha=2.0).
+
+    Forward:  spike = H(delta)          where delta = membrane - threshold
+    Backward: d_spike/d_delta ≈ 1 / (1 + (π/2 · α · delta)²)
+    """
+    @staticmethod
+    def forward(ctx, delta: torch.Tensor, alpha: float):
+        ctx.save_for_backward(delta)
+        ctx.alpha = alpha
+        return (delta >= 0).float()
+
+    @staticmethod
+    def backward(ctx, grad_output: torch.Tensor):
+        (delta,) = ctx.saved_tensors
+        sg = 1.0 / (1.0 + (math.pi / 2 * ctx.alpha * delta) ** 2)
+        return grad_output * sg, None   # no grad w.r.t. alpha (scalar)
+
+
+class LearnableLIFNode(nn.Module):
+    """
+    LIF neuron with learnable per-layer tau and v_threshold parameters.
+
+    Neuromorphic hypothesis: lower layers encode lexical features (faster dynamics,
+    smaller tau) while upper layers encode syntactic / semantic structure (slower
+    integration, larger tau).  Fixing tau=2 for every layer ignores this hierarchy.
+
+    Parameterisation:
+        tau       = 1 + softplus(log_tau)       — guaranteed > 1
+        threshold = softplus(log_threshold)     — guaranteed > 0
+
+    The spike function uses ATan surrogate gradient (same as spikingjelly default)
+    so that gradients flow through the discontinuous Heaviside step in backward.
+
+    The forward loop implements a discrete-time LIF with hard reset:
+        membrane[t] = membrane[t-1] / tau + x[t]
+        spike[t]    = H(membrane[t] - threshold)   [surrogate grad in backward]
+        membrane[t] = membrane[t] - spike[t] * threshold   # hard reset
+    """
+
+    def __init__(self, init_tau: float = 2.0, init_threshold: float = 1.0,
+                 surrogate_alpha: float = 2.0):
+        super().__init__()
+        # log_tau  parameterises  tau - 1  via softplus so tau > 1 always holds
+        self.log_tau = nn.Parameter(torch.tensor(math.log(init_tau - 1.0)))
+        # log_threshold parameterises threshold via softplus so threshold > 0
+        self.log_threshold = nn.Parameter(torch.tensor(math.log(init_threshold)))
+        self.surrogate_alpha = surrogate_alpha
+
+    @property
+    def tau(self) -> torch.Tensor:
+        return 1.0 + F.softplus(self.log_tau)
+
+    @property
+    def threshold(self) -> torch.Tensor:
+        return F.softplus(self.log_threshold)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """
+        Args:
+            x: [T_steps, B, C]  — time-major tensor produced by .permute(1, 0, 2)
+                                   inside Block.forward()
+        Returns:
+            spikes: [T_steps, B, C]  — binary spike tensor (same shape as x)
+        """
+        T_steps = x.shape[0]
+        tau = self.tau
+        threshold = self.threshold
+        membrane = torch.zeros_like(x[0])
+        spikes = []
+        for t in range(T_steps):
+            membrane = membrane / tau + x[t]
+            spike = _ATanSurrogate.apply(membrane - threshold, self.surrogate_alpha)
+            membrane = (membrane - spike * threshold).detach()  # hard reset, truncated BPTT
+            spikes.append(spike)
+        return torch.stack(spikes, dim=0)
+
+
 class GPTConfig:
     def __init__(self, vocab_size, ctx_len, **kwargs):
         self.vocab_size = vocab_size
@@ -313,12 +393,15 @@ class Block(nn.Module):
 
         self.ln1 = nn.LayerNorm(config.n_embd)
         self.ln2 = nn.LayerNorm(config.n_embd)
-        self.lif1 = neuron.MultiStepLIFNode(tau=2., surrogate_function=surrogate.ATan(alpha=2.0), backend='cupy',
-                                            v_threshold=1.)
-        self.lif2 = neuron.MultiStepLIFNode(tau=2., surrogate_function=surrogate.ATan(alpha=2.0), backend='cupy',
-                                            v_threshold=1.)
-        # self.lif1 = neuron.LIFNode(surrogate_function=surrogate.ATan(),step_mode='m',backend='cupy',detach_reset=True)
-        # self.lif2 = neuron.LIFNode(surrogate_function=surrogate.ATan(),step_mode='m',backend='cupy',detach_reset=True)
+
+        # Learnable LIF neurons: tau interpolated from 1.5 (layer 0) to 2.5 (last layer).
+        # This reflects the neuromorphic hypothesis that lower layers process lexical
+        # features with faster dynamics and upper layers integrate slower syntactic context.
+        n_layers = max(config.n_layer - 1, 1)
+        init_tau = 1.5 + (layer_id / n_layers) * 1.0  # linear 1.5 → 2.5
+        self.lif1 = LearnableLIFNode(init_tau=init_tau, init_threshold=1.0)
+        self.lif2 = LearnableLIFNode(init_tau=init_tau, init_threshold=1.0)
+
         self.dropout = nn.Dropout(0.03)
 
         if self.layer_id == 0:

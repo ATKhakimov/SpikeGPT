@@ -9,6 +9,7 @@ checkpoints/
 # Logs
 *.txt
 !requirements*.txt
+!wik8-0.01.txt
 
 # Python
 __pycache__/

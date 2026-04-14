@@ -2,16 +2,19 @@
 # SpikeGPT Russian — full setup script
 # Idempotent: safe to re-run, skips already completed steps
 #
-# Usage (from any directory on a fresh machine):
-#   HF_TOKEN=hf_xxx bash setup.sh
+# Run from repo root:
+#   bash setup.sh
 #   bash setup.sh --token hf_xxx
-#   bash setup.sh --token hf_xxx --proza-files 20
+#   bash setup.sh --proza-files 6
 
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
 # ── Parse args ────────────────────────────────────────────────────────────────
 HF_TOKEN="${HF_TOKEN:-}"
-PROZA_FILES=5   # how many proza parquet files to download (each ~245 MB, ~350M tokens)
+PROZA_FILES=17  # how many proza parquet files to download (each ~245 MB, ~79M tokens)
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -34,45 +37,20 @@ NC='\033[0m'
 ok()   { echo -e "${GREEN}[OK]${NC} $1"; }
 info() { echo -e "${YELLOW}[--]${NC} $1"; }
 
-# ── Step 0: Clone SpikeGPT repo ───────────────────────────────────────────────
-REPO_URL="https://github.com/ridgerchu/SpikeGPT.git"
-if [[ -d "SpikeGPT/.git" ]]; then
-    ok "SpikeGPT repo already cloned"
-else
-    info "Cloning SpikeGPT..."
-    git clone "$REPO_URL" SpikeGPT
-    ok "SpikeGPT cloned"
-fi
-
-cd SpikeGPT
-SCRIPT_DIR="$(pwd)"
-
 # ── Step 1: Python dependencies ───────────────────────────────────────────────
 info "Checking Python dependencies..."
 python3 -c "
 import importlib, sys
-needed = {
-    'transformers': '>=4.45',
-    'datasets':     '>=2.20',
-    'huggingface_hub': '>=0.20',
-    'pyarrow':      '>=14',
-    'numpy':        '>=1.26',
-    'accelerate':   '>=0.34',
-    'tqdm':         '>=4.66',
-}
-missing = []
-for pkg in needed:
-    try:
-        importlib.import_module(pkg)
-    except ImportError:
-        missing.append(pkg)
+import importlib.util
+needed = ['transformers', 'datasets', 'huggingface_hub', 'pyarrow', 'numpy', 'accelerate', 'tqdm']
+missing = [p for p in needed if not importlib.util.find_spec(p)]
 if missing:
     print('MISSING: ' + ' '.join(missing))
     sys.exit(1)
 print('all present')
 " && ok "Dependencies OK" || {
-    info "Installing missing packages..."
-    pip install -r requirements_cuda129_notorch.txt --quiet
+    info "Installing from requirements_runpod_cu128.txt..."
+    pip install -r "$SCRIPT_DIR/requirements_runpod_cu128.txt" --quiet
     ok "Dependencies installed"
 }
 
@@ -93,12 +71,18 @@ for f in ['vocab.json', 'merges.txt', 'special_tokens_map.json', 'tokenizer_conf
         token='$HF_TOKEN'
     )
     print(f'  {f}')
+
+# generate tokenizer.json (fast Rust tokenizer) from vocab+merges
+from transformers import GPT2TokenizerFast
+fast = GPT2TokenizerFast(vocab_file='$TOKENIZER_DIR/vocab.json',
+                         merges_file='$TOKENIZER_DIR/merges.txt')
+fast.save_pretrained('$TOKENIZER_DIR')
+print('  tokenizer.json (fast) generated')
 EOF
     ok "Tokenizer downloaded"
 fi
 
-# ── Step 3: Download taiga_stripped_rest ──────────────────────────────────────
-TAIGA_REST_DIR="data/taiga/data"
+# ── Step 3: Download taiga_stripped_rest ─────────────────────────────────────
 TAIGA_REST_MARKER="data/taiga/.done"
 if [[ -f "$TAIGA_REST_MARKER" ]]; then
     ok "taiga_stripped_rest already downloaded"
@@ -120,12 +104,12 @@ EOF
     ok "taiga_stripped_rest downloaded"
 fi
 
-# ── Step 4: Download taiga_proza (first N files) ──────────────────────────────
+# ── Step 4: Download taiga_stripped_proza (first N files) ────────────────────
 PROZA_MARKER="data/taiga_proza/.done_${PROZA_FILES}files"
 if [[ -f "$PROZA_MARKER" ]]; then
-    ok "taiga_proza (${PROZA_FILES} files) already downloaded"
+    ok "taiga_stripped_proza (${PROZA_FILES} files) already downloaded"
 else
-    info "Downloading cointegrated/taiga_proza — first ${PROZA_FILES} files (~$((PROZA_FILES * 245)) MB)..."
+    info "Downloading cointegrated/taiga_stripped_proza — first ${PROZA_FILES} files (~$((PROZA_FILES * 245)) MB)..."
     mkdir -p data/taiga_proza/data
     python3 - <<EOF
 from huggingface_hub import HfApi, hf_hub_download
@@ -134,7 +118,7 @@ import os
 api = HfApi()
 all_files = sorted([
     f for f in api.list_repo_files(
-        'cointegrated/taiga_proza', repo_type='dataset', token='$HF_TOKEN'
+        'cointegrated/taiga_stripped_proza', repo_type='dataset', token='$HF_TOKEN'
     )
     if f.startswith('data/') and f.endswith('.parquet')
 ])
@@ -143,7 +127,7 @@ files_to_get = all_files[:$PROZA_FILES]
 for i, f in enumerate(files_to_get, 1):
     print(f'  [{i}/{len(files_to_get)}] {os.path.basename(f)}')
     hf_hub_download(
-        repo_id='cointegrated/taiga_proza',
+        repo_id='cointegrated/taiga_stripped_proza',
         repo_type='dataset',
         filename=f,
         local_dir='data/taiga_proza',
@@ -152,10 +136,10 @@ for i, f in enumerate(files_to_get, 1):
 print('done')
 EOF
     touch "$PROZA_MARKER"
-    ok "taiga_proza downloaded"
+    ok "taiga_stripped_proza downloaded"
 fi
 
-# ── Step 5: Tokenize taiga_stripped_rest ──────────────────────────────────────
+# ── Step 5: Tokenize taiga_stripped_rest ─────────────────────────────────────
 if [[ -f "data/ru_train.npy" ]]; then
     ok "data/ru_train.npy already exists"
 else
@@ -166,11 +150,11 @@ else
     ok "data/ru_train.npy ready"
 fi
 
-# ── Step 6: Tokenize taiga_proza ──────────────────────────────────────────────
+# ── Step 6: Tokenize taiga_stripped_proza ────────────────────────────────────
 if [[ -f "data/ru_proza.npy" ]]; then
     ok "data/ru_proza.npy already exists"
 else
-    info "Tokenizing taiga_proza (${PROZA_FILES} files)..."
+    info "Tokenizing taiga_stripped_proza (${PROZA_FILES} files)..."
     python3 prepare_data.py \
         --taiga-dir data/taiga_proza/data \
         --output data/ru_proza.npy \
