@@ -1,0 +1,294 @@
+schema_version: 1
+
+defaults:
+  seed: 42
+  text_fields: ["text"]
+  min_chars: 200
+  max_chars: 20000
+  min_cyrillic_ratio: 0.45
+  max_repeated_line_fraction: 0.35
+  max_url_count: 12
+  trust_remote_code: false
+
+tokenizer_sample:
+  target_bytes: 2147483648
+  output: data/tokenizer_sample/spikerugpt_tokenizer_sample.txt
+  sources:
+    - name: fineweb2_ru
+      kind: hf
+      dataset: HuggingFaceFW/fineweb-2
+      config: rus_Cyrl
+      split: train
+      weight: 0.35
+      text_fields: ["text"]
+      license_note: Dataset card license/terms must be reviewed before release.
+
+    - name: cultura_ru_edu
+      kind: hf
+      dataset: deepvk/cultura_ru_edu
+      split: train
+      weight: 0.25
+      text_fields: ["text"]
+      license_note: Apache-2.0 according to dataset tags.
+
+    - name: wikipedia_ru
+      kind: hf
+      dataset: wikimedia/wikipedia
+      config: "20231101.ru"
+      split: train
+      weight: 0.15
+      text_fields: ["text"]
+      license_note: Check Wikimedia attribution/share-alike requirements.
+
+    - name: taiga_proza
+      kind: hf
+      dataset: cointegrated/taiga_stripped_proza
+      split: train
+      weight: 0.10
+      text_fields: ["text"]
+      license_note: Check dataset card and source licenses.
+
+    - name: taiga_rest
+      kind: hf
+      dataset: cointegrated/taiga_stripped_rest
+      split: Lenta
+      weight: 0.05
+      text_fields: ["text"]
+      license_note: Check dataset card and source licenses.
+
+    - name: habr
+      kind: hf
+      dataset: IlyaGusev/habr
+      split: train
+      weight: 0.05
+      text_fields: ["text"]
+      license_note: Check article-source terms before release.
+
+    - name: russian_pd
+      kind: hf
+      dataset: PleIAs/Russian-PD
+      split: train
+      weight: 0.05
+      text_fields: ["text", "content"]
+      license_note: Public-domain corpus; still keep source attribution metadata.
+
+pretrain_mix:
+  target_tokens: 10000000000
+  sources:
+    - name: fineweb2_ru
+      kind: hf
+      dataset: HuggingFaceFW/fineweb-2
+      config: rus_Cyrl
+      split: train
+      weight: 0.43
+      text_fields: ["text"]
+
+    - name: cultura_ru_edu
+      kind: hf
+      dataset: deepvk/cultura_ru_edu
+      split: train
+      weight: 0.25
+      text_fields: ["text"]
+
+    - name: hplt3_ru_top
+      kind: hf
+      dataset: HPLT/HPLT3.0
+      config: rus_Cyrl
+      split: train
+      weight: 0.10
+      enabled: false
+      text_fields: ["text"]
+      notes: Dataset Viewer may be unstable; prefer direct HPLT sorted shards/map once adapter is added.
+
+    - name: taiga_proza
+      kind: hf
+      dataset: cointegrated/taiga_stripped_proza
+      split: train
+      weight: 0.05
+      text_fields: ["text"]
+
+    - name: taiga_lenta
+      kind: hf
+      dataset: cointegrated/taiga_stripped_rest
+      split: Lenta
+      weight: 0.03
+      text_fields: ["text"]
+
+    - name: wikipedia_ru
+      kind: hf
+      dataset: wikimedia/wikipedia
+      config: "20231101.ru"
+      split: train
+      weight: 0.06
+      text_fields: ["text"]
+
+    - name: russian_pd
+      kind: hf
+      dataset: PleIAs/Russian-PD
+      split: train
+      weight: 0.04
+      text_fields: ["text", "content"]
+
+    - name: habr
+      kind: hf
+      dataset: IlyaGusev/habr
+      split: train
+      weight: 0.025
+      text_fields: ["text"]
+
+    - name: wikiomnia
+      kind: hf
+      dataset: RussianNLP/wikiomnia
+      split: train
+      weight: 0.015
+      enabled: false
+      text_fields: ["text", "context", "article"]
+      notes: Needs schema inspection and possibly custom QA-to-text adapter.
+
+validation_splits:
+  - name: val_web_clean
+    target_tokens: 5000000
+    sources:
+      - name: fineweb2_ru
+        kind: hf
+        dataset: HuggingFaceFW/fineweb-2
+        config: rus_Cyrl
+        split: test
+        weight: 0.60
+        text_fields: ["text"]
+      - name: cultura_ru_edu
+        kind: hf
+        dataset: deepvk/cultura_ru_edu
+        split: validation
+        weight: 0.40
+        text_fields: ["text"]
+
+  - name: val_edu
+    target_tokens: 5000000
+    sources:
+      - name: cultura_ru_edu
+        kind: hf
+        dataset: deepvk/cultura_ru_edu
+        split: validation
+        weight: 1.0
+        text_fields: ["text"]
+
+  - name: val_wiki
+    target_tokens: 5000000
+    sources:
+      - name: wikipedia_ru
+        kind: hf
+        dataset: wikimedia/wikipedia
+        config: "20231101.ru"
+        split: train
+        weight: 1.0
+        text_fields: ["text"]
+
+  - name: val_lit
+    target_tokens: 5000000
+    sources:
+      - name: taiga_proza
+        kind: hf
+        dataset: cointegrated/taiga_stripped_proza
+        split: train
+        weight: 1.0
+        text_fields: ["text"]
+
+  - name: val_habr
+    target_tokens: 2000000
+    sources:
+      - name: habr
+        kind: hf
+        dataset: IlyaGusev/habr
+        split: train
+        weight: 1.0
+        text_fields: ["text"]
+
+  - name: val_mixed
+    target_tokens: 10000000
+    sources:
+      - name: fineweb2_ru
+        kind: hf
+        dataset: HuggingFaceFW/fineweb-2
+        config: rus_Cyrl
+        split: test
+        weight: 0.35
+        text_fields: ["text"]
+      - name: cultura_ru_edu
+        kind: hf
+        dataset: deepvk/cultura_ru_edu
+        split: validation
+        weight: 0.25
+        text_fields: ["text"]
+      - name: wikipedia_ru
+        kind: hf
+        dataset: wikimedia/wikipedia
+        config: "20231101.ru"
+        split: train
+        weight: 0.15
+        text_fields: ["text"]
+      - name: taiga_proza
+        kind: hf
+        dataset: cointegrated/taiga_stripped_proza
+        split: train
+        weight: 0.15
+        text_fields: ["text"]
+      - name: habr
+        kind: hf
+        dataset: IlyaGusev/habr
+        split: train
+        weight: 0.10
+        text_fields: ["text"]
+
+sft_mix:
+  target_examples: 100000
+  output: data/sft/spikerugpt_sft_mix.jsonl
+  sources:
+    - name: saiga_scored
+      kind: hf
+      dataset: IlyaGusev/saiga_scored
+      split: train
+      weight: 0.35
+      min_score: 7.0
+      score_fields: ["score", "rating"]
+      instruction_fields: ["instruction", "prompt", "question"]
+      input_fields: ["input", "context"]
+      output_fields: ["output", "response", "answer"]
+
+    - name: russian_instructions
+      kind: hf
+      dataset: Den4ikAI/russian_instructions
+      split: train
+      weight: 0.20
+      instruction_fields: ["instruction", "prompt", "question"]
+      input_fields: ["input", "context"]
+      output_fields: ["output", "response", "answer"]
+
+    - name: aya_ru
+      kind: hf
+      dataset: CohereLabs/aya_dataset
+      split: train
+      weight: 0.10
+      language_field: language_code
+      language_values: ["rus", "ru"]
+      instruction_fields: ["inputs", "instruction", "prompt"]
+      output_fields: ["targets", "output", "response"]
+
+    - name: oasst1_ru_main_branch
+      kind: hf
+      dataset: IlyaGusev/oasst1_ru_main_branch
+      split: train
+      weight: 0.10
+      enabled: false
+      notes: Enable after schema inspection; may need conversation-tree adapter.
+
+    - name: wikiomnia
+      kind: hf
+      dataset: RussianNLP/wikiomnia
+      split: train
+      weight: 0.25
+      enabled: false
+      instruction_fields: ["question"]
+      input_fields: ["context", "article"]
+      output_fields: ["answer"]
+      notes: Enable after schema inspection; Dataset Viewer may not expose rows normally.

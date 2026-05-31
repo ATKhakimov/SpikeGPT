@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(micromamba run *)",
+      "Bash(micromamba env *)"
+    ]
+  }
+}

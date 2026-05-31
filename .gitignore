@@ -1,6 +1,8 @@
 # Data
 data/
 tokenizer/
+!scripts/data/
+!scripts/data/**
 
 # Checkpoints
 checkpoints/
