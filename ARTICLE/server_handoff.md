@@ -6,10 +6,11 @@
 ## 1. Что читать первым
 
 1. `ARTICLE/spikerugpt_training_plan.md`
-2. `configs/data_sources.yaml`
-3. `scripts/data/README.md`
-4. `scripts/data/common.py`
-5. `scripts/data/inspect_sources.py`
+2. `ARTICLE/spikerugpt_technical_log.md`
+3. `configs/data_sources.yaml`
+4. `scripts/data/README.md`
+5. `scripts/data/common.py`
+6. `scripts/data/inspect_sources.py`
 
 Главная идея: не скачивать все датасеты сразу. Сначала проверить источники, схемы, splits и первые строки, затем собрать tokenizer sample, validation splits и только потом pretraining shards.
 
@@ -287,4 +288,3 @@ Data-prep этап можно считать готовым, когда есть
 - короткий отчет, какие источники реально сработали, какие отключены и почему.
 
 После этого можно переходить к one-batch overfit и training code adaptation.
-

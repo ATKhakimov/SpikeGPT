@@ -42,28 +42,73 @@ def language_ok(row: Mapping[str, Any], source: Mapping[str, Any]) -> bool:
     return str(row.get(field, "")).lower() in {str(v).lower() for v in values}
 
 
+def normalize_role(role: str) -> str:
+    role = role.strip().lower()
+    if role in {"human", "user", "prompter"}:
+        return "user"
+    if role in {"assistant", "bot", "gpt", "model"}:
+        return "assistant"
+    if role == "system":
+        return "system"
+    return role
+
+
+def build_from_messages(messages: Any) -> Optional[Dict[str, Any]]:
+    if not isinstance(messages, list) or not messages:
+        return None
+    normalized = []
+    for message in messages:
+        if not isinstance(message, Mapping):
+            continue
+        role = normalize_role(str(message.get("role", "")))
+        content = normalize_text(str(message.get("content", "")))
+        if role and content:
+            normalized.append({"role": role, "content": content})
+    user_count = sum(1 for message in normalized if message["role"] == "user")
+    assistant_count = sum(1 for message in normalized if message["role"] == "assistant")
+    if user_count < 1 or assistant_count < 1:
+        return None
+    text_for_hash = "\n".join(m["role"] + ":" + m["content"] for m in normalized)
+    return {"messages": normalized, "hash": document_hash(text_for_hash)}
+
+
+def build_from_dialogue(dialogue: Any) -> Optional[Dict[str, Any]]:
+    if not isinstance(dialogue, list) or len(dialogue) < 2:
+        return None
+    normalized = []
+    for index, item in enumerate(dialogue):
+        content = normalize_text(str(item))
+        if not content:
+            continue
+        role = "user" if index % 2 == 0 else "assistant"
+        normalized.append({"role": role, "content": content})
+    if len(normalized) < 2 or normalized[0]["role"] != "user":
+        return None
+    if not any(message["role"] == "assistant" for message in normalized):
+        return None
+    text_for_hash = "\n".join(m["role"] + ":" + m["content"] for m in normalized)
+    return {"messages": normalized, "hash": document_hash(text_for_hash)}
+
+
 def build_messages(row: Mapping[str, Any], source: Mapping[str, Any]) -> Optional[Dict[str, Any]]:
     if not score_ok(row, source) or not language_ok(row, source):
         return None
+
+    example = build_from_messages(row.get("messages"))
+    if example:
+        return example
+
+    dialogue_field = source.get("dialogue_field")
+    if dialogue_field:
+        example = build_from_dialogue(row.get(dialogue_field))
+        if example:
+            return example
 
     instruction = first_field_text(row, source.get("instruction_fields", []))
     extra_input = first_field_text(row, source.get("input_fields", []))
     output = first_field_text(row, source.get("output_fields", []))
 
     if not instruction or not output:
-        messages = row.get("messages")
-        if isinstance(messages, list) and messages:
-            normalized = []
-            for message in messages:
-                if not isinstance(message, Mapping):
-                    continue
-                role = str(message.get("role", "")).strip().lower()
-                content = normalize_text(str(message.get("content", "")))
-                if role and content:
-                    normalized.append({"role": role, "content": content})
-            if len(normalized) >= 2:
-                text_for_hash = "\n".join(m["role"] + ":" + m["content"] for m in normalized)
-                return {"messages": normalized, "hash": document_hash(text_for_hash)}
         return None
 
     user_content = normalize_text(instruction)
@@ -82,6 +127,27 @@ def build_messages(row: Mapping[str, Any], source: Mapping[str, Any]) -> Optiona
     return {"messages": messages, "hash": document_hash(text_for_hash)}
 
 
+def length_ok(example: Mapping[str, Any], source: Mapping[str, Any]) -> bool:
+    min_user_chars = int(source.get("min_user_chars", 5))
+    max_user_chars = source.get("max_user_chars")
+    min_assistant_chars = int(source.get("min_assistant_chars", 5))
+    max_assistant_chars = source.get("max_assistant_chars")
+
+    users = [m["content"] for m in example["messages"] if m["role"] == "user"]
+    assistants = [m["content"] for m in example["messages"] if m["role"] == "assistant"]
+    if not users or not assistants:
+        return False
+    if any(len(text) < min_user_chars for text in users):
+        return False
+    if any(len(text) < min_assistant_chars for text in assistants):
+        return False
+    if max_user_chars is not None and any(len(text) > int(max_user_chars) for text in users):
+        return False
+    if max_assistant_chars is not None and any(len(text) > int(max_assistant_chars) for text in assistants):
+        return False
+    return True
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", default="configs/data_sources.yaml")
@@ -90,6 +156,7 @@ def main() -> None:
     parser.add_argument("--dedup", choices=["none", "memory"], default="memory")
     parser.add_argument("--max-rows-per-source", type=int, default=None)
     parser.add_argument("--manifest", default=None)
+    parser.add_argument("--exclude-jsonl", action="append", default=[])
     args = parser.parse_args()
 
     plan = load_plan(args.config)
@@ -100,6 +167,19 @@ def main() -> None:
     manifest_path = Path(args.manifest or f"{out_path}.manifest.json")
     quotas = weighted_quota(target_examples, sources)
     seen = set() if args.dedup == "memory" else None
+    if seen is not None:
+        for exclude_path in args.exclude_jsonl:
+            with open(exclude_path, "r", encoding="utf-8") as f:
+                for line in f:
+                    if not line.strip():
+                        continue
+                    try:
+                        record = json.loads(line)
+                    except json.JSONDecodeError:
+                        continue
+                    value = record.get("hash")
+                    if value:
+                        seen.add(value)
     manifest = {
         "config": args.config,
         "output": str(out_path),
@@ -123,6 +203,8 @@ def main() -> None:
                     break
                 example = build_messages(row, source)
                 if not example:
+                    continue
+                if not length_ok(example, source):
                     continue
                 if seen is not None:
                     if example["hash"] in seen:

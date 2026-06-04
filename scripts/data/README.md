@@ -63,3 +63,5 @@ Notes:
 - HPLT and WikiOmnia are currently disabled in the config until their schemas/loaders are inspected on the server.
 - `ru_turbo_*` datasets are intentionally not included in the first SFT mix until licensing/provenance is checked.
 - Exact deduplication is implemented in memory for first-pass pilots. Large production runs should replace it with a disk-backed hash store.
+- Text builders share the strict cleaning path in `common.py`: markup cleanup, light boilerplate removal, long-document chunking, language/quality filters, spam keyword filters, URL/email/phone limits, exact deduplication, SimHash near-deduplication, and per-source `filter_stats` in manifests.
+- Long high-quality sources such as Wikipedia, Taiga prose, and Russian-PD are chunked instead of being rejected only because the original document exceeds `max_chars`.

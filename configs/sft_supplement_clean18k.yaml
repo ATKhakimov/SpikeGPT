@@ -1,0 +1,64 @@
+schema_version: 1
+
+defaults:
+  seed: 42
+  trust_remote_code: false
+
+sft_mix:
+  target_examples: 18000
+  output: data/sft/spikerugpt_sft_clean70k_supplement.jsonl
+  sources:
+    - name: russian_instructions
+      kind: hf
+      dataset: Den4ikAI/russian_instructions
+      split: train
+      weight: 0.45
+      dialogue_field: dialogue
+      instruction_fields: ["instruction", "prompt", "question"]
+      input_fields: ["input", "context"]
+      output_fields: ["output", "response", "answer"]
+      min_user_chars: 5
+      max_user_chars: 300
+      min_assistant_chars: 40
+      max_assistant_chars: 1200
+
+    - name: russian_easy_instructions
+      kind: hf
+      dataset: attn-signs/russian-easy-instructions
+      split: train
+      weight: 0.35
+      dialogue_field: conversation
+      instruction_fields: ["instruction", "prompt", "question"]
+      output_fields: ["answer", "output", "response"]
+      min_user_chars: 5
+      max_user_chars: 180
+      min_assistant_chars: 80
+      max_assistant_chars: 1200
+
+    - name: ru_turbo_alpaca
+      kind: hf
+      dataset: IlyaGusev/ru_turbo_alpaca
+      data_files: "hf://datasets/IlyaGusev/ru_turbo_alpaca/ru_turbo_alpaca.jsonl.zst"
+      split: train
+      weight: 0.15
+      instruction_fields: ["instruction", "prompt", "question"]
+      input_fields: ["input", "context"]
+      output_fields: ["output", "response", "answer"]
+      min_user_chars: 5
+      max_user_chars: 300
+      min_assistant_chars: 60
+      max_assistant_chars: 1200
+
+    - name: ru_turbo_saiga
+      kind: hf
+      dataset: IlyaGusev/ru_turbo_saiga
+      data_files: "hf://datasets/IlyaGusev/ru_turbo_saiga/ru_turbo_saiga.jsonl.zst"
+      split: train
+      weight: 0.05
+      instruction_fields: ["instruction", "prompt", "question"]
+      input_fields: ["input", "context"]
+      output_fields: ["output", "response", "answer"]
+      min_user_chars: 5
+      max_user_chars: 300
+      min_assistant_chars: 60
+      max_assistant_chars: 1200

@@ -7,3 +7,4 @@ sentencepiece
 tqdm
 transformers
 xxhash
+zstandard

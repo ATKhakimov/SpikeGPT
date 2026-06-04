@@ -17,6 +17,7 @@ def main() -> None:
     parser.add_argument("--target-bytes", type=int, default=None)
     parser.add_argument("--max-docs-per-source", type=int, default=None)
     parser.add_argument("--dedup", choices=["none", "memory"], default="memory")
+    parser.add_argument("--near-dedup", choices=["none", "simhash"], default=None)
     parser.add_argument("--manifest", default=None)
     args = parser.parse_args()
 
@@ -28,13 +29,17 @@ def main() -> None:
     out_path = Path(args.out or section["output"])
     manifest_path = Path(args.manifest or f"{out_path}.manifest.json")
     quotas = weighted_quota(target_bytes, sources)
+    near_dedup = args.near_dedup or defaults.get("near_dedup", "none")
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
     seen = set() if args.dedup == "memory" else None
+    seen_simhashes = {} if near_dedup == "simhash" else None
     manifest = {
         "config": args.config,
         "output": str(out_path),
         "target_bytes": target_bytes,
+        "dedup": args.dedup,
+        "near_dedup": near_dedup,
         "sources": [],
     }
 
@@ -45,9 +50,16 @@ def main() -> None:
             quota = quotas[name]
             source_bytes = 0
             source_docs = 0
+            filter_stats: Dict[str, int] = {}
             print(f"[sample] {name}: quota={quota:,} bytes", flush=True)
 
-            for text, meta in iter_clean_texts(source, defaults, seen_hashes=seen):
+            for text, meta in iter_clean_texts(
+                source,
+                defaults,
+                seen_hashes=seen,
+                seen_simhashes=seen_simhashes,
+                stats=filter_stats,
+            ):
                 encoded_len = len(text.encode("utf-8")) + 2
                 if source_bytes >= quota:
                     break
@@ -74,6 +86,7 @@ def main() -> None:
                     "quota_bytes": quota,
                     "written_bytes": source_bytes,
                     "documents": source_docs,
+                    "filter_stats": filter_stats,
                 }
             )
 
