@@ -85,11 +85,11 @@ from transformers import AutoTokenizer
 # Загрузка токенизатора v0
 tokenizer = AutoTokenizer.from_pretrained("Koras1k/spikerugpt-100M-Taiga")
 
-# Загрузка модели — см. github.com/Koras1k/SpikeGPT
+# Загрузка модели — см. github.com/ATKhakimov/SpikeRuGPT
 # (требует src/model.py и CUDA-ядро wkv_cuda.cu)
 ```
 
-Полный код генерации: [github.com/Koras1k/SpikeGPT](https://github.com/Koras1k/SpikeGPT)
+Полный код генерации: [github.com/ATKhakimov/SpikeRuGPT](https://github.com/ATKhakimov/SpikeRuGPT)
 
 ## Результаты v0
 
