@@ -13,6 +13,7 @@ models/
 *.txt
 !requirements*.txt
 !wik8-0.01.txt
+logs/
 reports/
 
 # Python
@@ -26,6 +27,9 @@ build/
 # Jupyter
 .ipynb_checkpoints/
 *.ipynb
+
+# Local assistant/editor settings
+.claude/
 
 # Article binary drafts / templates
 *.doc
