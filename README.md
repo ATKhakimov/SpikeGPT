@@ -1,64 +1,90 @@
 # SpikeRuGPT
 
-SpikeRuGPT is a Russian adaptation of the SpikeGPT architecture: an RWKV-style autoregressive language model with LIF spiking neurons.
+SpikeRuGPT — русскоязычная адаптация архитектуры SpikeGPT: autoregressive language model в стиле RWKV с импульсными LIF-нейронами.
 
-The repository contains the original Russian 100M proof-of-concept model code, the newer reproducible v1 training pipeline, SFT experiments, and article/poster materials for the neuromorphic sparsity analysis.
+Репозиторий содержит код первой русскоязычной SpikeGPT-модели, воспроизводимый пайплайн v1, эксперименты с SFT, анализ спайковой активности и материалы для статьи/постера.
 
-## Status
+![SpikeGPT architecture](static/spikegpt.png)
 
-This is a research repository, not a production assistant model.
+## Статус
 
-The strongest current result is Russian base language modeling plus measurable spiking activity analysis. The SFT checkpoint is included as a diagnostic artifact: it improves formatting and removes visible dataset-corruption artifacts, but it is not yet a reliable factual QA/chat model.
+Это исследовательский репозиторий, а не production-ready чат-модель.
 
-## Model Artifacts
+Главный результат сейчас — русскоязычное базовое языковое моделирование и измеримый анализ нейроморфной спарсити. SFT-чекпоинт добавлен как диагностический артефакт: он лучше держит формат и убирает видимые артефакты загрязненных instruction-данных, но пока не является надежной factual QA/chat-моделью.
 
-Weights are not stored in git. Public artifacts are on Hugging Face:
+## Модели и веса
 
-- v0 Taiga checkpoint and tokenizer: https://huggingface.co/Koras1k/spikerugpt-100M-Taiga
+Веса не хранятся в git. Публичные артефакты лежат на Hugging Face:
+
+- v0 Taiga checkpoint и tokenizer: https://huggingface.co/Koras1k/spikerugpt-100M-Taiga
 - v1 SFT v2 superclean checkpoint: https://huggingface.co/Koras1k/spikerugpt-100M-Taiga/tree/main/sft-v2-superclean
 
-| Line | Parameters | Tokenizer | Training data | Role |
+| Линия | Параметры | Tokenizer | Данные | Роль |
 |---|---:|---|---|---|
-| `v0_taiga_100m` | 92.4M | ruGPT-3 BPE, 50k | Taiga, about 1.8B tokens | first Russian SpikeGPT baseline |
-| `v1_base_74m` | 73.7M | SentencePiece BPE, 32k | filtered mixed Russian corpus, about 0.95B tokens seen | reproducible pretraining pipeline |
-| `v1_sft_v2_superclean` | 73.7M | SentencePiece BPE, 32k | 45k short one-turn Russian instructions | SFT/data-cleaning diagnostic |
-| `SpikeGPT-OpenWebText-216M` | 215.4M | GPT-NeoX tokenizer | OpenWebText, original English line | reference model for comparison |
+| `v0_taiga_100m` | 92.4M | ruGPT-3 BPE, 50k | Taiga, около 1.8B токенов | первая русскоязычная baseline-модель |
+| `v1_base_74m` | 73.7M | SentencePiece BPE, 32k | очищенный смешанный русский корпус, около 0.95B показанных токенов | воспроизводимый pretrain-пайплайн |
+| `v1_sft_v2_superclean` | 73.7M | SentencePiece BPE, 32k | 45k коротких одноходовых русских инструкций | диагностический SFT |
+| `SpikeGPT-OpenWebText-216M` | 215.4M | GPT-NeoX tokenizer | OpenWebText | англоязычная референсная модель |
 
-## Key Results
+## Ключевые результаты
 
-| Experiment | Result |
+| Эксперимент | Результат |
 |---|---|
 | v0 Taiga validation perplexity | best validation PPL 59.79 |
-| Russian v0 spiking activity | mean firing rate 33.2% |
-| English SpikeGPT reference activity | mean firing rate 21.7% |
+| Спайковая активность v0 на русском | mean firing rate 33.2% |
+| Англоязычная SpikeGPT reference activity | mean firing rate 21.7% |
 | v1 base final evaluation | val_wiki PPL 69.90, val_mixed PPL 118.27 |
 | SFT v2 supervised validation | loss 4.0997, PPL 60.32 |
 
-Main interpretation:
+Основные выводы:
 
-- SpikeGPT-style spiking language models can be trained on Russian text.
-- Russian text produced higher measured firing rate than the English reference in this setup, so language and corpus choice matter for neuromorphic event budgets.
-- Smaller vocabularies are useful for small models: a 32k SentencePiece tokenizer saves parameters without materially hurting Russian token density in the measured validation sample.
-- Strict SFT cleaning removes visible `role/content` and code-like artifacts, but SFT alone does not compensate for a weak small base model.
+- SpikeGPT-подобные импульсные языковые модели можно обучать на русском тексте.
+- В нашей постановке русский текст дал более высокий firing rate, чем англоязычная reference-модель, поэтому язык и корпус влияют на нейроморфный event budget.
+- Для малых моделей tokenizer важен особенно сильно: 32k SentencePiece BPE уменьшает число параметров без заметной потери плотности кодирования на измеренном validation-фрагменте.
+- Строгая очистка SFT-данных убирает `role/content` и code-like артефакты, но SFT сам по себе не компенсирует слабость маленькой base-модели.
 
-## Repository Layout
+## Графики
+
+### Динамика обучения
+
+![Training loss by tokens](ARTICLE/figures/training_loss_by_tokens.png)
+
+### Сравнение спайковой активности
+
+![Sparsity summary](analysis/figures/sparsity_summary.png)
+
+### Послойная спайковая активность
+
+![Spike sparsity by layer](analysis/figures/spike_sparsity.png)
+
+### Обучаемые LIF-параметры
+
+![Learnable LIF tau](analysis/figures/lif_tau_final.png)
+
+Больше графиков и таблиц для статьи/постера:
+
+- [`ARTICLE/poster_assets/`](ARTICLE/poster_assets/)
+- [`ARTICLE/figures/`](ARTICLE/figures/)
+- [`analysis/figures/`](analysis/figures/)
+
+## Структура репозитория
 
 ```text
-src/                    SpikeGPT model, trainer utilities, vendored spikingjelly subset
-cuda/                   WKV CUDA kernels
+src/                    модель SpikeGPT, trainer utilities, vendored spikingjelly subset
+cuda/                   CUDA-ядра WKV
 train.py                original v0 training entrypoint
-generate.py             v0 generation entrypoint
-demo.py                 continuation-prompt demo for v0
-scripts/                v1 data, training, evaluation, SFT and analysis tools
-scripts/data/           dataset inspection, filtering, tokenizer and shard builders
-configs/                data-source and SFT configs
-analysis/               original v0 sparsity/LIF analysis scripts and figures
-ARTICLE/                paper draft, technical logs, poster assets and SFT analysis
+generate.py             generation entrypoint для v0
+demo.py                 continuation-prompt demo для v0
+scripts/                v1 data/training/evaluation/SFT/analysis tools
+scripts/data/           inspection, filtering, tokenizer и shard builders
+configs/                конфиги источников данных и SFT
+analysis/               старый v0 sparsity/LIF analysis и графики
+ARTICLE/                статья, technical logs, poster assets и SFT-анализ
 NLU/                    original SpikeGPT NLU evaluation scripts
-static/                 static project images
+static/                 статические изображения проекта
 ```
 
-Ignored local directories:
+Локальные run-артефакты игнорируются:
 
 - `data/`
 - `tokenizer/`
@@ -67,38 +93,38 @@ Ignored local directories:
 - `reports/`
 - `logs/`
 
-These are intentionally excluded because real runs create large local artifacts.
+Они исключены из git намеренно, потому что реальные training/eval runs создают большие файлы.
 
-## Documentation Map
+## Карта документации
 
-- Conference article draft: [`ARTICLE/spikerugpt_conference_article_draft.md`](ARTICLE/spikerugpt_conference_article_draft.md)
-- Technical training log: [`ARTICLE/spikerugpt_technical_log.md`](ARTICLE/spikerugpt_technical_log.md)
-- Training/data plan: [`ARTICLE/spikerugpt_training_plan.md`](ARTICLE/spikerugpt_training_plan.md)
-- v0/v1 comparison notes: [`ARTICLE/spikerugpt_v0_v1_comparison.md`](ARTICLE/spikerugpt_v0_v1_comparison.md)
+- Черновик статьи: [`ARTICLE/spikerugpt_conference_article_draft.md`](ARTICLE/spikerugpt_conference_article_draft.md)
+- Технический лог обучения: [`ARTICLE/spikerugpt_technical_log.md`](ARTICLE/spikerugpt_technical_log.md)
+- План обучения и данных: [`ARTICLE/spikerugpt_training_plan.md`](ARTICLE/spikerugpt_training_plan.md)
+- Сравнение v0/v1: [`ARTICLE/spikerugpt_v0_v1_comparison.md`](ARTICLE/spikerugpt_v0_v1_comparison.md)
 - Poster assets: [`ARTICLE/poster_assets/README.md`](ARTICLE/poster_assets/README.md)
 - SFT v2 analysis: [`ARTICLE/sft_v2_superclean/README.md`](ARTICLE/sft_v2_superclean/README.md)
 - Data pipeline docs: [`scripts/data/README.md`](scripts/data/README.md)
 
-## Setup
+## Установка
 
-Install PyTorch for your CUDA version first, then install the project dependencies:
+Сначала установите PyTorch под вашу версию CUDA, затем зависимости проекта:
 
 ```bash
 pip install -r requirements.txt
 pip install -r requirements_data.txt
 ```
 
-For RTX 50xx / CUDA 12.8 environments, use the dedicated environment notes in:
+Для RTX 50xx / CUDA 12.8 окружений есть отдельные заметки:
 
 ```bash
 requirements_runpod_cu128.txt
 ```
 
-Some scripts require Hugging Face access for dataset/model downloads. Set `HF_TOKEN` or login through `huggingface_hub` before running data-preparation jobs.
+Некоторые скрипты скачивают датасеты/модели с Hugging Face. Для них нужен `HF_TOKEN` или авторизация через `huggingface_hub`.
 
 ## v1 Data and Training Pipeline
 
-Inspect configured data sources:
+Проверить источники данных:
 
 ```bash
 python scripts/data/inspect_sources.py \
@@ -106,7 +132,7 @@ python scripts/data/inspect_sources.py \
   --out reports/data_source_inspection.jsonl
 ```
 
-Build tokenizer sample and train the 32k SentencePiece tokenizer:
+Собрать sample для tokenizer-а и обучить 32k SentencePiece:
 
 ```bash
 python scripts/data/build_tokenizer_sample.py \
@@ -119,7 +145,7 @@ python scripts/data/train_sentencepiece.py \
   --vocab-size 32000
 ```
 
-Build pretraining shards:
+Собрать pretraining shards:
 
 ```bash
 python scripts/data/build_pretrain_shards.py \
@@ -130,7 +156,7 @@ python scripts/data/build_pretrain_shards.py \
   --max-tokens 1000000000
 ```
 
-Run autonomous pretraining:
+Запустить автономный pretrain:
 
 ```bash
 python scripts/run_autonomous_training.py \
@@ -140,7 +166,7 @@ python scripts/run_autonomous_training.py \
   --precision bf16
 ```
 
-Build the superclean SFT dataset and train SFT:
+Собрать superclean SFT dataset и запустить SFT:
 
 ```bash
 python scripts/data/build_sft_superclean.py \
@@ -154,9 +180,9 @@ python scripts/train_sft.py \
   --run-id sft-step43674-v2-superclean
 ```
 
-## v0 Generation
+## Генерация v0
 
-The original v0 code expects a local checkpoint and tokenizer. Download them from Hugging Face, then run:
+Оригинальный v0-код ожидает локальный checkpoint и tokenizer. Скачайте их с Hugging Face, затем:
 
 ```bash
 python generate.py \
@@ -166,9 +192,9 @@ python generate.py \
   --top_p 0.9
 ```
 
-## Analysis
+## Анализ
 
-Spiking activity and model-comparison scripts:
+Скрипты для spiking activity и сравнения моделей:
 
 ```bash
 python scripts/analyze_spiking_activity.py
@@ -178,17 +204,17 @@ python scripts/compare_sft_generations.py
 python scripts/build_poster_assets.py
 ```
 
-The article can be rebuilt from markdown:
+Статья пересобирается из markdown:
 
 ```bash
 python scripts/article/build_conference_docx.py
 ```
 
-The generated `.docx` is intentionally ignored by git.
+Сгенерированный `.docx` намеренно игнорируется git.
 
-## Citation
+## Цитирование
 
-If you use this repository, cite the original SpikeGPT paper:
+Если используете этот репозиторий, цитируйте оригинальную статью SpikeGPT:
 
 ```bibtex
 @article{zhu2023spikegpt,
@@ -199,6 +225,6 @@ If you use this repository, cite the original SpikeGPT paper:
 }
 ```
 
-## License
+## Лицензия
 
-This repository is released under the MIT license. See [`LICENSE`](LICENSE).
+Репозиторий распространяется под лицензией MIT. См. [`LICENSE`](LICENSE).
