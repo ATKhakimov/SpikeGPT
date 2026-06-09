@@ -1,0 +1,5 @@
+label,params_m,train_tokens_b,tokenizer,notes
+v0_taiga_100m,92.43,1.8,ruGPT-3 BPE 50k,old Taiga continuation baseline
+base_1b_74m,73.73,0.945,SentencePiece BPE 32k,controlled v1 pretrain checkpoint
+sft_v2_superclean,73.73,0.945,SentencePiece BPE 32k,"super-clean SFT, diagnostic only"
+original_en_216m,215.4,5.0,GPT-NeoX 20B BPE,original English OpenWebText model

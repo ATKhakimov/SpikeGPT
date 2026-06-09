@@ -1,0 +1,66 @@
+{
+  "config": {
+    "checkpoint": "checkpoints/spikegpt-en-216M.pth",
+    "ctx_len": 1024,
+    "seed": 20260609,
+    "repetition_penalty": 1.15,
+    "out_json": "ARTICLE/original_english_spikegpt_generations.json",
+    "out_md": "ARTICLE/original_english_spikegpt_generations.md"
+  },
+  "examples": [
+    {
+      "title": "Prose: autumn",
+      "prompt": "The old forest was quiet, and the yellow leaves slowly",
+      "continuation": "vanished from the trees. It felt like a tree. It felt like a tree. The trees were dead, and a few trees had gone missing.\"",
+      "full_text": "The old forest was quiet, and the yellow leaves slowly vanished from the trees. It felt like a tree. It felt like a tree. The trees were dead, and a few trees had gone missing.\"",
+      "max_tokens": 120,
+      "temperature": 0.8,
+      "top_p": 0.9
+    },
+    {
+      "title": "Dialogue",
+      "prompt": "“You know this is impossible,” he said.\n“Why not,”",
+      "continuation": "he replied, “because I don’t know how to handle it.”",
+      "full_text": "“You know this is impossible,” he said.\n“Why not,” he replied, “because I don’t know how to handle it.”",
+      "max_tokens": 140,
+      "temperature": 0.8,
+      "top_p": 0.9
+    },
+    {
+      "title": "City night",
+      "prompt": "Late at night, the streets of London were empty. A single street lamp",
+      "continuation": "ooned with a plume of smoke splashed through the walls.",
+      "full_text": "Late at night, the streets of London were empty. A single street lamp ooned with a plume of smoke splashed through the walls.",
+      "max_tokens": 120,
+      "temperature": 0.8,
+      "top_p": 0.9
+    },
+    {
+      "title": "News",
+      "prompt": "This morning in New York, officials announced",
+      "continuation": "that a man had been arrested in connection with an arrest warrant for a violent crime.",
+      "full_text": "This morning in New York, officials announced that a man had been arrested in connection with an arrest warrant for a violent crime.",
+      "max_tokens": 100,
+      "temperature": 0.75,
+      "top_p": 0.85
+    },
+    {
+      "title": "Science",
+      "prompt": "Researchers at the university discovered a new method",
+      "continuation": "of measuring glucose levels that could help prevent cancer.",
+      "full_text": "Researchers at the university discovered a new method of measuring glucose levels that could help prevent cancer.",
+      "max_tokens": 100,
+      "temperature": 0.75,
+      "top_p": 0.85
+    },
+    {
+      "title": "History",
+      "prompt": "In October 1917, events in Petrograd changed",
+      "continuation": "dramatically. In 1944, the Soviet Union invaded Russia, forcing Ukraine into a war of war. Russia became the second-largest nation in the world. In October 1944, the Soviet Union regained control of Crimea and annexed Crimea. The situation continued for months. At the time, the Kremlin annexed Ukraine into an industrial zone and annexed Crimea. During the war, Russia annexed Crimea, annexed Crimea, and annexed Crimea into Ukraine. It became a major strategic exporter of energy and infrastructure. In December 1920, Russia annexed Crimea into territory of",
+      "full_text": "In October 1917, events in Petrograd changed dramatically. In 1944, the Soviet Union invaded Russia, forcing Ukraine into a war of war. Russia became the second-largest nation in the world. In October 1944, the Soviet Union regained control of Crimea and annexed Crimea. The situation continued for months. At the time, the Kremlin annexed Ukraine into an industrial zone and annexed Crimea. During the war, Russia annexed Crimea, annexed Crimea, and annexed Crimea into Ukraine. It became a major strategic exporter of energy and infrastructure. In December 1920, Russia annexed Crimea into territory of",
+      "max_tokens": 120,
+      "temperature": 0.8,
+      "top_p": 0.85
+    }
+  ]
+}

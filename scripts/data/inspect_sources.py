@@ -10,6 +10,15 @@ from typing import Any, Dict, Iterable, Mapping
 from common import collect_sources, extract_text, is_enabled, load_plan, normalize_text, source_name
 
 
+def hf_metadata_kwargs(config: str | None, trust_remote_code: bool) -> Dict[str, Any]:
+    kwargs: Dict[str, Any] = {}
+    if config:
+        kwargs["config_name"] = config
+    if trust_remote_code:
+        kwargs["trust_remote_code"] = True
+    return kwargs
+
+
 def inspect_hf_source(source: Mapping[str, Any], max_samples: int) -> Dict[str, Any]:
     from datasets import get_dataset_config_names, get_dataset_split_names, load_dataset
 
@@ -28,7 +37,8 @@ def inspect_hf_source(source: Mapping[str, Any], max_samples: int) -> Dict[str, 
     }
 
     try:
-        configs = get_dataset_config_names(dataset, trust_remote_code=trust_remote_code)
+        config_kwargs = hf_metadata_kwargs(None, trust_remote_code)
+        configs = get_dataset_config_names(dataset, **config_kwargs)
         result["config_count"] = len(configs)
         result["config_seen"] = config in configs if config else None
         result["config_preview"] = configs[:10]
@@ -36,9 +46,7 @@ def inspect_hf_source(source: Mapping[str, Any], max_samples: int) -> Dict[str, 
         result["config_error"] = repr(exc)
 
     try:
-        split_kwargs = {"trust_remote_code": trust_remote_code}
-        if config:
-            split_kwargs["config_name"] = config
+        split_kwargs = hf_metadata_kwargs(config, trust_remote_code)
         result["available_splits"] = get_dataset_split_names(dataset, **split_kwargs)
         result["split_seen"] = split in result["available_splits"]
     except Exception as exc:
@@ -91,6 +99,11 @@ def main() -> None:
         default=["tokenizer_sample", "pretrain_mix", "validation_splits", "sft_mix"],
     )
     parser.add_argument("--names", nargs="*", default=None)
+    parser.add_argument(
+        "--include-disabled",
+        action="store_true",
+        help="Inspect sources with enabled: false as well.",
+    )
     parser.add_argument("--max-samples", type=int, default=3)
     parser.add_argument("--out", default="reports/data_source_inspection.jsonl")
     args = parser.parse_args()
@@ -100,6 +113,11 @@ def main() -> None:
     sources = collect_sources(plan, args.sections)
     if wanted:
         sources = [s for s in sources if source_name(s) in wanted]
+    if not args.include_disabled:
+        skipped = [source_name(s) for s in sources if not is_enabled(s)]
+        sources = [s for s in sources if is_enabled(s)]
+        for name in skipped:
+            print(f"[skip disabled] {name}", flush=True)
 
     results = []
     for source in sources:

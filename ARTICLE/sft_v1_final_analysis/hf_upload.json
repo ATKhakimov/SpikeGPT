@@ -1,0 +1,40 @@
+{
+  "repo_id": "Koras1k/spikerugpt-autonomous-runs",
+  "run_id": "sft-step43674-v1-b64tok18k",
+  "uploaded": [
+    "runs/sft-step43674-v1-b64tok18k/sft/final.pt",
+    "runs/sft-step43674-v1-b64tok18k/sft/best.pt",
+    "runs/sft-step43674-v1-b64tok18k/sft/model_state_sft.pt",
+    "runs/sft-step43674-v1-b64tok18k/sft/sft-step43674-v1-b64tok18k.json",
+    "runs/sft-step43674-v1-b64tok18k/sft/sft-step43674-v1-b64tok18k.metrics.jsonl",
+    "runs/sft-step43674-v1-b64tok18k/sft/sft_lm_eval.json",
+    "runs/sft-step43674-v1-b64tok18k/sft/sft_lm_eval.md",
+    "runs/sft-step43674-v1-b64tok18k/sft/sft_generations.json",
+    "runs/sft-step43674-v1-b64tok18k/sft/sft_generations.md",
+    "runs/sft-step43674-v1-b64tok18k/sft/README.md",
+    "runs/sft-step43674-v1-b64tok18k/sft/sft-finalizer.log"
+  ],
+  "finished_at": "2026-06-09T02:41:03+00:00",
+  "train": {
+    "step": 1721,
+    "epochs": 1,
+    "examples_seen": 63596,
+    "initial_loss": 4.887921333312988,
+    "final_loss": 4.012796878814697,
+    "min_loss": 3.6702165603637695,
+    "avg_last_50_loss": 4.01525842666626,
+    "elapsed_sec": 6903.878878715994,
+    "examples_per_sec": 9.211633214400745,
+    "peak_mem_gb": 18.822178840637207,
+    "latest_checkpoint": "checkpoints/sft/sft-step43674-v1-b64tok18k/latest.pt",
+    "best_checkpoint": "checkpoints/sft/sft-step43674-v1-b64tok18k/best.pt",
+    "final_checkpoint": "checkpoints/sft/sft-step43674-v1-b64tok18k/final.pt"
+  },
+  "validation": {
+    "loss": 3.8271644145320836,
+    "ppl": 45.932108979225724,
+    "supervised_tokens": 118759,
+    "batches": 30,
+    "examples": 1000
+  }
+}

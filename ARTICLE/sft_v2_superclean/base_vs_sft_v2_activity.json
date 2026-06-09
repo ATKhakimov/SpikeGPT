@@ -1,0 +1,1660 @@
+{
+  "checkpoints": {
+    "base_1b": {
+      "path": "checkpoints/autonomous/autonomous-ctx1024-1b-bf16-5d/latest.pt",
+      "step": 43674,
+      "tokens_seen": 944590848
+    },
+    "sft_v2": {
+      "path": "checkpoints/sft/sft-step43674-v2-superclean/final.pt",
+      "step": 690,
+      "tokens_seen": 0
+    }
+  },
+  "eval": {
+    "base_1b": {
+      "val_wiki": {
+        "loss": 4.551311095555623,
+        "ppl": 94.7565618156505,
+        "tokens": 6144,
+        "bytes": 56227,
+        "bpb": 0.7174924831662479
+      },
+      "val_lit": {
+        "loss": 4.837124029795329,
+        "ppl": 126.10615216863496,
+        "tokens": 6144,
+        "bytes": 57849,
+        "bpb": 0.7411687731524528
+      },
+      "val_habr": {
+        "loss": 5.092111269632976,
+        "ppl": 162.73307301589972,
+        "tokens": 6144,
+        "bytes": 89589,
+        "bpb": 0.503812504074393
+      }
+    },
+    "sft_v2": {
+      "val_wiki": {
+        "loss": 4.640425602595012,
+        "ppl": 103.58842570552754,
+        "tokens": 6144,
+        "bytes": 56227,
+        "bpb": 0.7315409600994691
+      },
+      "val_lit": {
+        "loss": 4.941125472386678,
+        "ppl": 139.92764567223654,
+        "tokens": 6144,
+        "bytes": 57849,
+        "bpb": 0.7571044037330845
+      },
+      "val_habr": {
+        "loss": 5.1943027178446455,
+        "ppl": 180.24241914716563,
+        "tokens": 6144,
+        "bytes": 89589,
+        "bpb": 0.5139233061940452
+      }
+    }
+  },
+  "activity": {
+    "base_1b": {
+      "val_wiki": [
+        {
+          "layer": 0,
+          "branch": "lif1",
+          "firing_rate": 0.08813285827636719,
+          "silent_channel_fraction": 0.560546875,
+          "channel_rate_mean": 0.08813285827636719,
+          "channel_rate_std": 0.24226997792720795
+        },
+        {
+          "layer": 0,
+          "branch": "lif2",
+          "firing_rate": 0.09387588500976562,
+          "silent_channel_fraction": 0.044921875,
+          "channel_rate_mean": 0.09387588500976562,
+          "channel_rate_std": 0.210909903049469
+        },
+        {
+          "layer": 1,
+          "branch": "lif1",
+          "firing_rate": 0.009977340698242188,
+          "silent_channel_fraction": 0.947265625,
+          "channel_rate_mean": 0.009977340698242188,
+          "channel_rate_std": 0.09829690307378769
+        },
+        {
+          "layer": 1,
+          "branch": "lif2",
+          "firing_rate": 0.004723866780598958,
+          "silent_channel_fraction": 0.63671875,
+          "channel_rate_mean": 0.0047238669358193874,
+          "channel_rate_std": 0.045959968119859695
+        },
+        {
+          "layer": 2,
+          "branch": "lif1",
+          "firing_rate": 0.0031458536783854165,
+          "silent_channel_fraction": 0.83203125,
+          "channel_rate_mean": 0.003145853988826275,
+          "channel_rate_std": 0.048082370311021805
+        },
+        {
+          "layer": 2,
+          "branch": "lif2",
+          "firing_rate": 0.009162267049153646,
+          "silent_channel_fraction": 0.384765625,
+          "channel_rate_mean": 0.009162267670035362,
+          "channel_rate_std": 0.08055897802114487
+        },
+        {
+          "layer": 3,
+          "branch": "lif1",
+          "firing_rate": 0.0015246073404947917,
+          "silent_channel_fraction": 0.9765625,
+          "channel_rate_mean": 0.0015246073016896844,
+          "channel_rate_std": 0.02207212522625923
+        },
+        {
+          "layer": 3,
+          "branch": "lif2",
+          "firing_rate": 0.0009212493896484375,
+          "silent_channel_fraction": 0.896484375,
+          "channel_rate_mean": 0.0009212493314407766,
+          "channel_rate_std": 0.011892341077327728
+        },
+        {
+          "layer": 4,
+          "branch": "lif1",
+          "firing_rate": 0.0046545664469401045,
+          "silent_channel_fraction": 0.935546875,
+          "channel_rate_mean": 0.004654566757380962,
+          "channel_rate_std": 0.03574707731604576
+        },
+        {
+          "layer": 4,
+          "branch": "lif2",
+          "firing_rate": 0.002407709757486979,
+          "silent_channel_fraction": 0.888671875,
+          "channel_rate_mean": 0.00240770960226655,
+          "channel_rate_std": 0.04395316541194916
+        },
+        {
+          "layer": 5,
+          "branch": "lif1",
+          "firing_rate": 0.026364644368489582,
+          "silent_channel_fraction": 0.58984375,
+          "channel_rate_mean": 0.0263646449893713,
+          "channel_rate_std": 0.05664510279893875
+        },
+        {
+          "layer": 5,
+          "branch": "lif2",
+          "firing_rate": 0.0056883494059244795,
+          "silent_channel_fraction": 0.63671875,
+          "channel_rate_mean": 0.005688349716365337,
+          "channel_rate_std": 0.029468633234500885
+        },
+        {
+          "layer": 6,
+          "branch": "lif1",
+          "firing_rate": 0.08469645182291667,
+          "silent_channel_fraction": 0.279296875,
+          "channel_rate_mean": 0.0846964493393898,
+          "channel_rate_std": 0.08893969655036926
+        },
+        {
+          "layer": 6,
+          "branch": "lif2",
+          "firing_rate": 9.791056315104167e-05,
+          "silent_channel_fraction": 0.97265625,
+          "channel_rate_mean": 9.791056800168008e-05,
+          "channel_rate_std": 0.0011092886561527848
+        },
+        {
+          "layer": 7,
+          "branch": "lif1",
+          "firing_rate": 0.13436381022135416,
+          "silent_channel_fraction": 0.1640625,
+          "channel_rate_mean": 0.1343638002872467,
+          "channel_rate_std": 0.10940083861351013
+        },
+        {
+          "layer": 7,
+          "branch": "lif2",
+          "firing_rate": 0.0055077870686848955,
+          "silent_channel_fraction": 0.828125,
+          "channel_rate_mean": 0.005507787223905325,
+          "channel_rate_std": 0.04737027361989021
+        },
+        {
+          "layer": 8,
+          "branch": "lif1",
+          "firing_rate": 0.19688924153645834,
+          "silent_channel_fraction": 0.091796875,
+          "channel_rate_mean": 0.1968892514705658,
+          "channel_rate_std": 0.13988269865512848
+        },
+        {
+          "layer": 8,
+          "branch": "lif2",
+          "firing_rate": 0.02483367919921875,
+          "silent_channel_fraction": 0.388671875,
+          "channel_rate_mean": 0.02483367919921875,
+          "channel_rate_std": 0.05826623737812042
+        },
+        {
+          "layer": 9,
+          "branch": "lif1",
+          "firing_rate": 0.30327733357747394,
+          "silent_channel_fraction": 0.00390625,
+          "channel_rate_mean": 0.3032773435115814,
+          "channel_rate_std": 0.14914755523204803
+        },
+        {
+          "layer": 9,
+          "branch": "lif2",
+          "firing_rate": 0.03928438822428385,
+          "silent_channel_fraction": 0.20703125,
+          "channel_rate_mean": 0.03928438574075699,
+          "channel_rate_std": 0.07958263158798218
+        },
+        {
+          "layer": 10,
+          "branch": "lif1",
+          "firing_rate": 0.36849085489908856,
+          "silent_channel_fraction": 0.0,
+          "channel_rate_mean": 0.36849087476730347,
+          "channel_rate_std": 0.14482738077640533
+        },
+        {
+          "layer": 10,
+          "branch": "lif2",
+          "firing_rate": 0.12378120422363281,
+          "silent_channel_fraction": 0.017578125,
+          "channel_rate_mean": 0.12378120422363281,
+          "channel_rate_std": 0.1422174572944641
+        },
+        {
+          "layer": 11,
+          "branch": "lif1",
+          "firing_rate": 0.4165636698404948,
+          "silent_channel_fraction": 0.0,
+          "channel_rate_mean": 0.41656365990638733,
+          "channel_rate_std": 0.15721198916435242
+        },
+        {
+          "layer": 11,
+          "branch": "lif2",
+          "firing_rate": 0.3654155731201172,
+          "silent_channel_fraction": 0.0,
+          "channel_rate_mean": 0.3654155731201172,
+          "channel_rate_std": 0.15147122740745544
+        }
+      ],
+      "val_lit": [
+        {
+          "layer": 0,
+          "branch": "lif1",
+          "firing_rate": 0.09086290995279948,
+          "silent_channel_fraction": 0.6015625,
+          "channel_rate_mean": 0.09086291491985321,
+          "channel_rate_std": 0.24716897308826447
+        },
+        {
+          "layer": 0,
+          "branch": "lif2",
+          "firing_rate": 0.08983039855957031,
+          "silent_channel_fraction": 0.05859375,
+          "channel_rate_mean": 0.08983039855957031,
+          "channel_rate_std": 0.20574864745140076
+        },
+        {
+          "layer": 1,
+          "branch": "lif1",
+          "firing_rate": 0.009979883829752604,
+          "silent_channel_fraction": 0.931640625,
+          "channel_rate_mean": 0.009979883208870888,
+          "channel_rate_std": 0.09825775772333145
+        },
+        {
+          "layer": 1,
+          "branch": "lif2",
+          "firing_rate": 0.004437764485677083,
+          "silent_channel_fraction": 0.619140625,
+          "channel_rate_mean": 0.0044377646408975124,
+          "channel_rate_std": 0.04567743092775345
+        },
+        {
+          "layer": 2,
+          "branch": "lif1",
+          "firing_rate": 0.0032711029052734375,
+          "silent_channel_fraction": 0.939453125,
+          "channel_rate_mean": 0.0032711029052734375,
+          "channel_rate_std": 0.05026226490736008
+        },
+        {
+          "layer": 2,
+          "branch": "lif2",
+          "firing_rate": 0.009026209513346354,
+          "silent_channel_fraction": 0.42578125,
+          "channel_rate_mean": 0.009026209823787212,
+          "channel_rate_std": 0.0815228745341301
+        },
+        {
+          "layer": 3,
+          "branch": "lif1",
+          "firing_rate": 0.002024968465169271,
+          "silent_channel_fraction": 0.978515625,
+          "channel_rate_mean": 0.0020249683875590563,
+          "channel_rate_std": 0.029482988640666008
+        },
+        {
+          "layer": 3,
+          "branch": "lif2",
+          "firing_rate": 0.0007648468017578125,
+          "silent_channel_fraction": 0.896484375,
+          "channel_rate_mean": 0.0007648468017578125,
+          "channel_rate_std": 0.010931224562227726
+        },
+        {
+          "layer": 4,
+          "branch": "lif1",
+          "firing_rate": 0.007119496663411458,
+          "silent_channel_fraction": 0.935546875,
+          "channel_rate_mean": 0.0071194963529706,
+          "channel_rate_std": 0.048494838178157806
+        },
+        {
+          "layer": 4,
+          "branch": "lif2",
+          "firing_rate": 0.0022799173990885415,
+          "silent_channel_fraction": 0.8984375,
+          "channel_rate_mean": 0.0022799174766987562,
+          "channel_rate_std": 0.043728020042181015
+        },
+        {
+          "layer": 5,
+          "branch": "lif1",
+          "firing_rate": 0.03334744771321615,
+          "silent_channel_fraction": 0.603515625,
+          "channel_rate_mean": 0.03334745019674301,
+          "channel_rate_std": 0.06780004501342773
+        },
+        {
+          "layer": 5,
+          "branch": "lif2",
+          "firing_rate": 0.0051441192626953125,
+          "silent_channel_fraction": 0.697265625,
+          "channel_rate_mean": 0.0051441192626953125,
+          "channel_rate_std": 0.03588961809873581
+        },
+        {
+          "layer": 6,
+          "branch": "lif1",
+          "firing_rate": 0.09684054056803386,
+          "silent_channel_fraction": 0.28125,
+          "channel_rate_mean": 0.09684053808450699,
+          "channel_rate_std": 0.10110850632190704
+        },
+        {
+          "layer": 6,
+          "branch": "lif2",
+          "firing_rate": 6.993611653645833e-05,
+          "silent_channel_fraction": 0.982421875,
+          "channel_rate_mean": 6.993611896177754e-05,
+          "channel_rate_std": 0.0007341671152971685
+        },
+        {
+          "layer": 7,
+          "branch": "lif1",
+          "firing_rate": 0.1423041025797526,
+          "silent_channel_fraction": 0.166015625,
+          "channel_rate_mean": 0.14230410754680634,
+          "channel_rate_std": 0.12325960397720337
+        },
+        {
+          "layer": 7,
+          "branch": "lif2",
+          "firing_rate": 0.006262461344401042,
+          "silent_channel_fraction": 0.86328125,
+          "channel_rate_mean": 0.0062624611891806126,
+          "channel_rate_std": 0.05799432471394539
+        },
+        {
+          "layer": 8,
+          "branch": "lif1",
+          "firing_rate": 0.20316950480143228,
+          "silent_channel_fraction": 0.091796875,
+          "channel_rate_mean": 0.20316950976848602,
+          "channel_rate_std": 0.12828050553798676
+        },
+        {
+          "layer": 8,
+          "branch": "lif2",
+          "firing_rate": 0.02400525410970052,
+          "silent_channel_fraction": 0.474609375,
+          "channel_rate_mean": 0.024005252867937088,
+          "channel_rate_std": 0.06810539960861206
+        },
+        {
+          "layer": 9,
+          "branch": "lif1",
+          "firing_rate": 0.29784266153971356,
+          "silent_channel_fraction": 0.005859375,
+          "channel_rate_mean": 0.29784268140792847,
+          "channel_rate_std": 0.13867737352848053
+        },
+        {
+          "layer": 9,
+          "branch": "lif2",
+          "firing_rate": 0.040843963623046875,
+          "silent_channel_fraction": 0.2734375,
+          "channel_rate_mean": 0.040843963623046875,
+          "channel_rate_std": 0.09339557588100433
+        },
+        {
+          "layer": 10,
+          "branch": "lif1",
+          "firing_rate": 0.3570473988850911,
+          "silent_channel_fraction": 0.0,
+          "channel_rate_mean": 0.3570473790168762,
+          "channel_rate_std": 0.13058747351169586
+        },
+        {
+          "layer": 10,
+          "branch": "lif2",
+          "firing_rate": 0.12957636515299478,
+          "silent_channel_fraction": 0.02734375,
+          "channel_rate_mean": 0.12957637012004852,
+          "channel_rate_std": 0.1660691499710083
+        },
+        {
+          "layer": 11,
+          "branch": "lif1",
+          "firing_rate": 0.410854975382487,
+          "silent_channel_fraction": 0.0,
+          "channel_rate_mean": 0.4108549654483795,
+          "channel_rate_std": 0.14386294782161713
+        },
+        {
+          "layer": 11,
+          "branch": "lif2",
+          "firing_rate": 0.3362865447998047,
+          "silent_channel_fraction": 0.0,
+          "channel_rate_mean": 0.3362865447998047,
+          "channel_rate_std": 0.14263516664505005
+        }
+      ],
+      "val_habr": [
+        {
+          "layer": 0,
+          "branch": "lif1",
+          "firing_rate": 0.0881487528483073,
+          "silent_channel_fraction": 0.572265625,
+          "channel_rate_mean": 0.08814875781536102,
+          "channel_rate_std": 0.23983816802501678
+        },
+        {
+          "layer": 0,
+          "branch": "lif2",
+          "firing_rate": 0.09504127502441406,
+          "silent_channel_fraction": 0.044921875,
+          "channel_rate_mean": 0.09504127502441406,
+          "channel_rate_std": 0.20959797501564026
+        },
+        {
+          "layer": 1,
+          "branch": "lif1",
+          "firing_rate": 0.009937922159830729,
+          "silent_channel_fraction": 0.93359375,
+          "channel_rate_mean": 0.009937922470271587,
+          "channel_rate_std": 0.09825042635202408
+        },
+        {
+          "layer": 1,
+          "branch": "lif2",
+          "firing_rate": 0.0048160552978515625,
+          "silent_channel_fraction": 0.650390625,
+          "channel_rate_mean": 0.004816054832190275,
+          "channel_rate_std": 0.04641076922416687
+        },
+        {
+          "layer": 2,
+          "branch": "lif1",
+          "firing_rate": 0.0031534830729166665,
+          "silent_channel_fraction": 0.875,
+          "channel_rate_mean": 0.0031534829176962376,
+          "channel_rate_std": 0.04815937951207161
+        },
+        {
+          "layer": 2,
+          "branch": "lif2",
+          "firing_rate": 0.009054183959960938,
+          "silent_channel_fraction": 0.51953125,
+          "channel_rate_mean": 0.009054183959960938,
+          "channel_rate_std": 0.08062780648469925
+        },
+        {
+          "layer": 3,
+          "branch": "lif1",
+          "firing_rate": 0.0015087127685546875,
+          "silent_channel_fraction": 0.982421875,
+          "channel_rate_mean": 0.0015087127685546875,
+          "channel_rate_std": 0.02166162058711052
+        },
+        {
+          "layer": 3,
+          "branch": "lif2",
+          "firing_rate": 0.0008729298909505209,
+          "silent_channel_fraction": 0.908203125,
+          "channel_rate_mean": 0.0008729298133403063,
+          "channel_rate_std": 0.012369314208626747
+        },
+        {
+          "layer": 4,
+          "branch": "lif1",
+          "firing_rate": 0.004895528157552083,
+          "silent_channel_fraction": 0.939453125,
+          "channel_rate_mean": 0.004895527847111225,
+          "channel_rate_std": 0.03629973158240318
+        },
+        {
+          "layer": 4,
+          "branch": "lif2",
+          "firing_rate": 0.0022328694661458335,
+          "silent_channel_fraction": 0.896484375,
+          "channel_rate_mean": 0.0022328693885356188,
+          "channel_rate_std": 0.04376760125160217
+        },
+        {
+          "layer": 5,
+          "branch": "lif1",
+          "firing_rate": 0.02789624532063802,
+          "silent_channel_fraction": 0.58984375,
+          "channel_rate_mean": 0.027896245941519737,
+          "channel_rate_std": 0.05742385983467102
+        },
+        {
+          "layer": 5,
+          "branch": "lif2",
+          "firing_rate": 0.0061766306559244795,
+          "silent_channel_fraction": 0.630859375,
+          "channel_rate_mean": 0.006176630966365337,
+          "channel_rate_std": 0.029682200402021408
+        },
+        {
+          "layer": 6,
+          "branch": "lif1",
+          "firing_rate": 0.08105087280273438,
+          "silent_channel_fraction": 0.279296875,
+          "channel_rate_mean": 0.08105087280273438,
+          "channel_rate_std": 0.08178087323904037
+        },
+        {
+          "layer": 6,
+          "branch": "lif2",
+          "firing_rate": 0.00013224283854166666,
+          "silent_channel_fraction": 0.9765625,
+          "channel_rate_mean": 0.00013224282884038985,
+          "channel_rate_std": 0.001584532088600099
+        },
+        {
+          "layer": 7,
+          "branch": "lif1",
+          "firing_rate": 0.13066673278808594,
+          "silent_channel_fraction": 0.1640625,
+          "channel_rate_mean": 0.13066673278808594,
+          "channel_rate_std": 0.09621789306402206
+        },
+        {
+          "layer": 7,
+          "branch": "lif2",
+          "firing_rate": 0.006010691324869792,
+          "silent_channel_fraction": 0.8125,
+          "channel_rate_mean": 0.0060106911696493626,
+          "channel_rate_std": 0.04769671708345413
+        },
+        {
+          "layer": 8,
+          "branch": "lif1",
+          "firing_rate": 0.17935880025227866,
+          "silent_channel_fraction": 0.091796875,
+          "channel_rate_mean": 0.17935879528522491,
+          "channel_rate_std": 0.10453051328659058
+        },
+        {
+          "layer": 8,
+          "branch": "lif2",
+          "firing_rate": 0.03285662333170573,
+          "silent_channel_fraction": 0.3828125,
+          "channel_rate_mean": 0.03285662457346916,
+          "channel_rate_std": 0.06347154825925827
+        },
+        {
+          "layer": 9,
+          "branch": "lif1",
+          "firing_rate": 0.28514862060546875,
+          "silent_channel_fraction": 0.005859375,
+          "channel_rate_mean": 0.28514862060546875,
+          "channel_rate_std": 0.09489763528108597
+        },
+        {
+          "layer": 9,
+          "branch": "lif2",
+          "firing_rate": 0.043193817138671875,
+          "silent_channel_fraction": 0.232421875,
+          "channel_rate_mean": 0.043193817138671875,
+          "channel_rate_std": 0.08104343712329865
+        },
+        {
+          "layer": 10,
+          "branch": "lif1",
+          "firing_rate": 0.3504505157470703,
+          "silent_channel_fraction": 0.0,
+          "channel_rate_mean": 0.3504505157470703,
+          "channel_rate_std": 0.09956403821706772
+        },
+        {
+          "layer": 10,
+          "branch": "lif2",
+          "firing_rate": 0.11427243550618489,
+          "silent_channel_fraction": 0.01171875,
+          "channel_rate_mean": 0.11427243798971176,
+          "channel_rate_std": 0.12800320982933044
+        },
+        {
+          "layer": 11,
+          "branch": "lif1",
+          "firing_rate": 0.4113229115804036,
+          "silent_channel_fraction": 0.0,
+          "channel_rate_mean": 0.4113228917121887,
+          "channel_rate_std": 0.09514667093753815
+        },
+        {
+          "layer": 11,
+          "branch": "lif2",
+          "firing_rate": 0.33333714803059894,
+          "silent_channel_fraction": 0.0,
+          "channel_rate_mean": 0.33333712816238403,
+          "channel_rate_std": 0.11079097539186478
+        }
+      ],
+      "_mean_by_layer": [
+        {
+          "layer": 0,
+          "firing_rate": 0.09098201327853733,
+          "silent_channel_fraction": 0.3138020833333333
+        },
+        {
+          "layer": 1,
+          "firing_rate": 0.0073121388753255205,
+          "silent_channel_fraction": 0.7864583333333334
+        },
+        {
+          "layer": 2,
+          "firing_rate": 0.0061355166965060765,
+          "silent_channel_fraction": 0.6627604166666666
+        },
+        {
+          "layer": 3,
+          "firing_rate": 0.001269552442762587,
+          "silent_channel_fraction": 0.9397786458333334
+        },
+        {
+          "layer": 4,
+          "firing_rate": 0.003931681315104167,
+          "silent_channel_fraction": 0.9156901041666666
+        },
+        {
+          "layer": 5,
+          "firing_rate": 0.017436239454481337,
+          "silent_channel_fraction": 0.6246744791666666
+        },
+        {
+          "layer": 6,
+          "firing_rate": 0.043814659118652344,
+          "silent_channel_fraction": 0.6285807291666666
+        },
+        {
+          "layer": 7,
+          "firing_rate": 0.07085259755452473,
+          "silent_channel_fraction": 0.4996744791666667
+        },
+        {
+          "layer": 8,
+          "firing_rate": 0.11018551720513238,
+          "silent_channel_fraction": 0.2535807291666667
+        },
+        {
+          "layer": 9,
+          "firing_rate": 0.16826513078477648,
+          "silent_channel_fraction": 0.12141927083333333
+        },
+        {
+          "layer": 10,
+          "firing_rate": 0.2406031290690104,
+          "silent_channel_fraction": 0.009440104166666666
+        },
+        {
+          "layer": 11,
+          "firing_rate": 0.3789634704589844,
+          "silent_channel_fraction": 0.0
+        }
+      ]
+    },
+    "sft_v2": {
+      "val_wiki": [
+        {
+          "layer": 0,
+          "branch": "lif1",
+          "firing_rate": 0.08811696370442708,
+          "silent_channel_fraction": 0.556640625,
+          "channel_rate_mean": 0.08811696618795395,
+          "channel_rate_std": 0.2421453893184662
+        },
+        {
+          "layer": 0,
+          "branch": "lif2",
+          "firing_rate": 0.09442838033040364,
+          "silent_channel_fraction": 0.044921875,
+          "channel_rate_mean": 0.09442837536334991,
+          "channel_rate_std": 0.21101714670658112
+        },
+        {
+          "layer": 1,
+          "branch": "lif1",
+          "firing_rate": 0.009978612263997396,
+          "silent_channel_fraction": 0.947265625,
+          "channel_rate_mean": 0.009978612884879112,
+          "channel_rate_std": 0.09829524904489517
+        },
+        {
+          "layer": 1,
+          "branch": "lif2",
+          "firing_rate": 0.0047334035237630205,
+          "silent_channel_fraction": 0.623046875,
+          "channel_rate_mean": 0.004733403213322163,
+          "channel_rate_std": 0.04629213735461235
+        },
+        {
+          "layer": 2,
+          "branch": "lif1",
+          "firing_rate": 0.0031687418619791665,
+          "silent_channel_fraction": 0.833984375,
+          "channel_rate_mean": 0.0031687419395893812,
+          "channel_rate_std": 0.04815926030278206
+        },
+        {
+          "layer": 2,
+          "branch": "lif2",
+          "firing_rate": 0.009074529012044271,
+          "silent_channel_fraction": 0.365234375,
+          "channel_rate_mean": 0.009074528701603413,
+          "channel_rate_std": 0.07955833524465561
+        },
+        {
+          "layer": 3,
+          "branch": "lif1",
+          "firing_rate": 0.0014559427897135417,
+          "silent_channel_fraction": 0.9765625,
+          "channel_rate_mean": 0.0014559427509084344,
+          "channel_rate_std": 0.02150147221982479
+        },
+        {
+          "layer": 3,
+          "branch": "lif2",
+          "firing_rate": 0.0006618499755859375,
+          "silent_channel_fraction": 0.888671875,
+          "channel_rate_mean": 0.0006618499755859375,
+          "channel_rate_std": 0.0068436600267887115
+        },
+        {
+          "layer": 4,
+          "branch": "lif1",
+          "firing_rate": 0.004572550455729167,
+          "silent_channel_fraction": 0.935546875,
+          "channel_rate_mean": 0.0045725503005087376,
+          "channel_rate_std": 0.03473706543445587
+        },
+        {
+          "layer": 4,
+          "branch": "lif2",
+          "firing_rate": 0.0024280548095703125,
+          "silent_channel_fraction": 0.876953125,
+          "channel_rate_mean": 0.0024280548095703125,
+          "channel_rate_std": 0.043955735862255096
+        },
+        {
+          "layer": 5,
+          "branch": "lif1",
+          "firing_rate": 0.026109695434570312,
+          "silent_channel_fraction": 0.59375,
+          "channel_rate_mean": 0.026109695434570312,
+          "channel_rate_std": 0.05663158372044563
+        },
+        {
+          "layer": 5,
+          "branch": "lif2",
+          "firing_rate": 0.005659739176432292,
+          "silent_channel_fraction": 0.638671875,
+          "channel_rate_mean": 0.00565973948687315,
+          "channel_rate_std": 0.029212819412350655
+        },
+        {
+          "layer": 6,
+          "branch": "lif1",
+          "firing_rate": 0.08571497599283855,
+          "silent_channel_fraction": 0.279296875,
+          "channel_rate_mean": 0.08571498095989227,
+          "channel_rate_std": 0.09020110219717026
+        },
+        {
+          "layer": 6,
+          "branch": "lif2",
+          "firing_rate": 0.000102996826171875,
+          "silent_channel_fraction": 0.97265625,
+          "channel_rate_mean": 0.000102996826171875,
+          "channel_rate_std": 0.001203177380375564
+        },
+        {
+          "layer": 7,
+          "branch": "lif1",
+          "firing_rate": 0.13393211364746094,
+          "silent_channel_fraction": 0.16015625,
+          "channel_rate_mean": 0.13393211364746094,
+          "channel_rate_std": 0.10813003778457642
+        },
+        {
+          "layer": 7,
+          "branch": "lif2",
+          "firing_rate": 0.0054836273193359375,
+          "silent_channel_fraction": 0.826171875,
+          "channel_rate_mean": 0.0054836273193359375,
+          "channel_rate_std": 0.047411445528268814
+        },
+        {
+          "layer": 8,
+          "branch": "lif1",
+          "firing_rate": 0.19712257385253906,
+          "silent_channel_fraction": 0.091796875,
+          "channel_rate_mean": 0.19712257385253906,
+          "channel_rate_std": 0.13879713416099548
+        },
+        {
+          "layer": 8,
+          "branch": "lif2",
+          "firing_rate": 0.024843851725260418,
+          "silent_channel_fraction": 0.380859375,
+          "channel_rate_mean": 0.02484385296702385,
+          "channel_rate_std": 0.05808981880545616
+        },
+        {
+          "layer": 9,
+          "branch": "lif1",
+          "firing_rate": 0.3102957407633464,
+          "silent_channel_fraction": 0.00390625,
+          "channel_rate_mean": 0.3102957308292389,
+          "channel_rate_std": 0.14675793051719666
+        },
+        {
+          "layer": 9,
+          "branch": "lif2",
+          "firing_rate": 0.0398413340250651,
+          "silent_channel_fraction": 0.203125,
+          "channel_rate_mean": 0.03984133526682854,
+          "channel_rate_std": 0.07929959893226624
+        },
+        {
+          "layer": 10,
+          "branch": "lif1",
+          "firing_rate": 0.3776251475016276,
+          "silent_channel_fraction": 0.0,
+          "channel_rate_mean": 0.37762513756752014,
+          "channel_rate_std": 0.1526123732328415
+        },
+        {
+          "layer": 10,
+          "branch": "lif2",
+          "firing_rate": 0.12458737691243489,
+          "silent_channel_fraction": 0.01953125,
+          "channel_rate_mean": 0.12458737194538116,
+          "channel_rate_std": 0.14168472588062286
+        },
+        {
+          "layer": 11,
+          "branch": "lif1",
+          "firing_rate": 0.424954096476237,
+          "silent_channel_fraction": 0.0,
+          "channel_rate_mean": 0.4249541163444519,
+          "channel_rate_std": 0.15886928141117096
+        },
+        {
+          "layer": 11,
+          "branch": "lif2",
+          "firing_rate": 0.36994171142578125,
+          "silent_channel_fraction": 0.0,
+          "channel_rate_mean": 0.36994171142578125,
+          "channel_rate_std": 0.15428154170513153
+        }
+      ],
+      "val_lit": [
+        {
+          "layer": 0,
+          "branch": "lif1",
+          "firing_rate": 0.09072558085123698,
+          "silent_channel_fraction": 0.59765625,
+          "channel_rate_mean": 0.09072558581829071,
+          "channel_rate_std": 0.24687369167804718
+        },
+        {
+          "layer": 0,
+          "branch": "lif2",
+          "firing_rate": 0.09054946899414062,
+          "silent_channel_fraction": 0.056640625,
+          "channel_rate_mean": 0.09054946899414062,
+          "channel_rate_std": 0.20640310645103455
+        },
+        {
+          "layer": 1,
+          "branch": "lif1",
+          "firing_rate": 0.009972890218098959,
+          "silent_channel_fraction": 0.93359375,
+          "channel_rate_mean": 0.009972890838980675,
+          "channel_rate_std": 0.0982564389705658
+        },
+        {
+          "layer": 1,
+          "branch": "lif2",
+          "firing_rate": 0.0044333140055338545,
+          "silent_channel_fraction": 0.6171875,
+          "channel_rate_mean": 0.004433313850313425,
+          "channel_rate_std": 0.04595904052257538
+        },
+        {
+          "layer": 2,
+          "branch": "lif1",
+          "firing_rate": 0.003307342529296875,
+          "silent_channel_fraction": 0.9375,
+          "channel_rate_mean": 0.0033073422964662313,
+          "channel_rate_std": 0.05040520429611206
+        },
+        {
+          "layer": 2,
+          "branch": "lif2",
+          "firing_rate": 0.008947372436523438,
+          "silent_channel_fraction": 0.419921875,
+          "channel_rate_mean": 0.008947372436523438,
+          "channel_rate_std": 0.08076629787683487
+        },
+        {
+          "layer": 3,
+          "branch": "lif1",
+          "firing_rate": 0.00196075439453125,
+          "silent_channel_fraction": 0.98046875,
+          "channel_rate_mean": 0.00196075439453125,
+          "channel_rate_std": 0.028998693451285362
+        },
+        {
+          "layer": 3,
+          "branch": "lif2",
+          "firing_rate": 0.0005054473876953125,
+          "silent_channel_fraction": 0.912109375,
+          "channel_rate_mean": 0.0005054473876953125,
+          "channel_rate_std": 0.0058404929004609585
+        },
+        {
+          "layer": 4,
+          "branch": "lif1",
+          "firing_rate": 0.007016499837239583,
+          "silent_channel_fraction": 0.935546875,
+          "channel_rate_mean": 0.007016499526798725,
+          "channel_rate_std": 0.04748834669589996
+        },
+        {
+          "layer": 4,
+          "branch": "lif2",
+          "firing_rate": 0.002288182576497396,
+          "silent_channel_fraction": 0.896484375,
+          "channel_rate_mean": 0.002288182731717825,
+          "channel_rate_std": 0.043729957193136215
+        },
+        {
+          "layer": 5,
+          "branch": "lif1",
+          "firing_rate": 0.03287569681803385,
+          "silent_channel_fraction": 0.60546875,
+          "channel_rate_mean": 0.03287569433450699,
+          "channel_rate_std": 0.06734722852706909
+        },
+        {
+          "layer": 5,
+          "branch": "lif2",
+          "firing_rate": 0.00510406494140625,
+          "silent_channel_fraction": 0.697265625,
+          "channel_rate_mean": 0.00510406494140625,
+          "channel_rate_std": 0.03556620329618454
+        },
+        {
+          "layer": 6,
+          "branch": "lif1",
+          "firing_rate": 0.09746805826822917,
+          "silent_channel_fraction": 0.28125,
+          "channel_rate_mean": 0.0974680632352829,
+          "channel_rate_std": 0.09991773217916489
+        },
+        {
+          "layer": 6,
+          "branch": "lif2",
+          "firing_rate": 7.947285970052083e-05,
+          "silent_channel_fraction": 0.982421875,
+          "channel_rate_mean": 7.947286212584004e-05,
+          "channel_rate_std": 0.0008817276684567332
+        },
+        {
+          "layer": 7,
+          "branch": "lif1",
+          "firing_rate": 0.14158185323079428,
+          "silent_channel_fraction": 0.166015625,
+          "channel_rate_mean": 0.14158184826374054,
+          "channel_rate_std": 0.11983910948038101
+        },
+        {
+          "layer": 7,
+          "branch": "lif2",
+          "firing_rate": 0.0062669118245442705,
+          "silent_channel_fraction": 0.869140625,
+          "channel_rate_mean": 0.006266911514103413,
+          "channel_rate_std": 0.058019496500492096
+        },
+        {
+          "layer": 8,
+          "branch": "lif1",
+          "firing_rate": 0.20290311177571616,
+          "silent_channel_fraction": 0.091796875,
+          "channel_rate_mean": 0.20290310680866241,
+          "channel_rate_std": 0.12358487397432327
+        },
+        {
+          "layer": 8,
+          "branch": "lif2",
+          "firing_rate": 0.023874918619791668,
+          "silent_channel_fraction": 0.46875,
+          "channel_rate_mean": 0.0238749198615551,
+          "channel_rate_std": 0.06755594164133072
+        },
+        {
+          "layer": 9,
+          "branch": "lif1",
+          "firing_rate": 0.3046468098958333,
+          "silent_channel_fraction": 0.005859375,
+          "channel_rate_mean": 0.3046467900276184,
+          "channel_rate_std": 0.1263655424118042
+        },
+        {
+          "layer": 9,
+          "branch": "lif2",
+          "firing_rate": 0.04071935017903646,
+          "silent_channel_fraction": 0.265625,
+          "channel_rate_mean": 0.040719352662563324,
+          "channel_rate_std": 0.0903099849820137
+        },
+        {
+          "layer": 10,
+          "branch": "lif1",
+          "firing_rate": 0.3684609731038411,
+          "silent_channel_fraction": 0.0,
+          "channel_rate_mean": 0.3684609532356262,
+          "channel_rate_std": 0.12962386012077332
+        },
+        {
+          "layer": 10,
+          "branch": "lif2",
+          "firing_rate": 0.12956110636393228,
+          "silent_channel_fraction": 0.029296875,
+          "channel_rate_mean": 0.12956111133098602,
+          "channel_rate_std": 0.1624186933040619
+        },
+        {
+          "layer": 11,
+          "branch": "lif1",
+          "firing_rate": 0.4234167734781901,
+          "silent_channel_fraction": 0.0,
+          "channel_rate_mean": 0.42341676354408264,
+          "channel_rate_std": 0.14184647798538208
+        },
+        {
+          "layer": 11,
+          "branch": "lif2",
+          "firing_rate": 0.3458747863769531,
+          "silent_channel_fraction": 0.0,
+          "channel_rate_mean": 0.3458747863769531,
+          "channel_rate_std": 0.1381336897611618
+        }
+      ],
+      "val_habr": [
+        {
+          "layer": 0,
+          "branch": "lif1",
+          "firing_rate": 0.08809534708658855,
+          "silent_channel_fraction": 0.56640625,
+          "channel_rate_mean": 0.08809535205364227,
+          "channel_rate_std": 0.23972265422344208
+        },
+        {
+          "layer": 0,
+          "branch": "lif2",
+          "firing_rate": 0.09555371602376302,
+          "silent_channel_fraction": 0.046875,
+          "channel_rate_mean": 0.09555371105670929,
+          "channel_rate_std": 0.20970390737056732
+        },
+        {
+          "layer": 1,
+          "branch": "lif1",
+          "firing_rate": 0.009948094685872396,
+          "silent_channel_fraction": 0.919921875,
+          "channel_rate_mean": 0.009948095306754112,
+          "channel_rate_std": 0.09824914485216141
+        },
+        {
+          "layer": 1,
+          "branch": "lif2",
+          "firing_rate": 0.004793802897135417,
+          "silent_channel_fraction": 0.65625,
+          "channel_rate_mean": 0.004793803207576275,
+          "channel_rate_std": 0.04672874137759209
+        },
+        {
+          "layer": 2,
+          "branch": "lif1",
+          "firing_rate": 0.0031916300455729165,
+          "silent_channel_fraction": 0.87890625,
+          "channel_rate_mean": 0.0031916301231831312,
+          "channel_rate_std": 0.04824092239141464
+        },
+        {
+          "layer": 2,
+          "branch": "lif2",
+          "firing_rate": 0.00897979736328125,
+          "silent_channel_fraction": 0.51953125,
+          "channel_rate_mean": 0.00897979736328125,
+          "channel_rate_std": 0.07974293828010559
+        },
+        {
+          "layer": 3,
+          "branch": "lif1",
+          "firing_rate": 0.0014508565266927083,
+          "silent_channel_fraction": 0.982421875,
+          "channel_rate_mean": 0.0014508564490824938,
+          "channel_rate_std": 0.021240118891000748
+        },
+        {
+          "layer": 3,
+          "branch": "lif2",
+          "firing_rate": 0.0005811055501302084,
+          "silent_channel_fraction": 0.904296875,
+          "channel_rate_mean": 0.0005811055889353156,
+          "channel_rate_std": 0.00670829089358449
+        },
+        {
+          "layer": 4,
+          "branch": "lif1",
+          "firing_rate": 0.004805246988932292,
+          "silent_channel_fraction": 0.939453125,
+          "channel_rate_mean": 0.0048052468337118626,
+          "channel_rate_std": 0.03524065017700195
+        },
+        {
+          "layer": 4,
+          "branch": "lif2",
+          "firing_rate": 0.0022404988606770835,
+          "silent_channel_fraction": 0.900390625,
+          "channel_rate_mean": 0.0022404990158975124,
+          "channel_rate_std": 0.04376830905675888
+        },
+        {
+          "layer": 5,
+          "branch": "lif1",
+          "firing_rate": 0.027617136637369793,
+          "silent_channel_fraction": 0.591796875,
+          "channel_rate_mean": 0.027617136016488075,
+          "channel_rate_std": 0.05712388828396797
+        },
+        {
+          "layer": 5,
+          "branch": "lif2",
+          "firing_rate": 0.006162007649739583,
+          "silent_channel_fraction": 0.625,
+          "channel_rate_mean": 0.006162007339298725,
+          "channel_rate_std": 0.02950192242860794
+        },
+        {
+          "layer": 6,
+          "branch": "lif1",
+          "firing_rate": 0.08211199442545573,
+          "silent_channel_fraction": 0.28125,
+          "channel_rate_mean": 0.08211199194192886,
+          "channel_rate_std": 0.08302731066942215
+        },
+        {
+          "layer": 6,
+          "branch": "lif2",
+          "firing_rate": 0.00014241536458333334,
+          "silent_channel_fraction": 0.9765625,
+          "channel_rate_mean": 0.00014241535973269492,
+          "channel_rate_std": 0.0017767883837223053
+        },
+        {
+          "layer": 7,
+          "branch": "lif1",
+          "firing_rate": 0.13086700439453125,
+          "silent_channel_fraction": 0.162109375,
+          "channel_rate_mean": 0.13086700439453125,
+          "channel_rate_std": 0.09600011259317398
+        },
+        {
+          "layer": 7,
+          "branch": "lif2",
+          "firing_rate": 0.0060164133707682295,
+          "silent_channel_fraction": 0.8203125,
+          "channel_rate_mean": 0.0060164132155478,
+          "channel_rate_std": 0.047975245863199234
+        },
+        {
+          "layer": 8,
+          "branch": "lif1",
+          "firing_rate": 0.18180338541666666,
+          "silent_channel_fraction": 0.08984375,
+          "channel_rate_mean": 0.1818033903837204,
+          "channel_rate_std": 0.1095540001988411
+        },
+        {
+          "layer": 8,
+          "branch": "lif2",
+          "firing_rate": 0.03291130065917969,
+          "silent_channel_fraction": 0.384765625,
+          "channel_rate_mean": 0.03291130065917969,
+          "channel_rate_std": 0.06334681808948517
+        },
+        {
+          "layer": 9,
+          "branch": "lif1",
+          "firing_rate": 0.29488372802734375,
+          "silent_channel_fraction": 0.005859375,
+          "channel_rate_mean": 0.29488372802734375,
+          "channel_rate_std": 0.10438237339258194
+        },
+        {
+          "layer": 9,
+          "branch": "lif2",
+          "firing_rate": 0.04390080769856771,
+          "silent_channel_fraction": 0.228515625,
+          "channel_rate_mean": 0.043900806456804276,
+          "channel_rate_std": 0.08117661625146866
+        },
+        {
+          "layer": 10,
+          "branch": "lif1",
+          "firing_rate": 0.3611138661702474,
+          "silent_channel_fraction": 0.0,
+          "channel_rate_mean": 0.36111384630203247,
+          "channel_rate_std": 0.10506673902273178
+        },
+        {
+          "layer": 10,
+          "branch": "lif2",
+          "firing_rate": 0.11515744527180989,
+          "silent_channel_fraction": 0.01171875,
+          "channel_rate_mean": 0.11515744775533676,
+          "channel_rate_std": 0.12913255393505096
+        },
+        {
+          "layer": 11,
+          "branch": "lif1",
+          "firing_rate": 0.4239317576090495,
+          "silent_channel_fraction": 0.0,
+          "channel_rate_mean": 0.4239317774772644,
+          "channel_rate_std": 0.10764099657535553
+        },
+        {
+          "layer": 11,
+          "branch": "lif2",
+          "firing_rate": 0.3386147816975911,
+          "silent_channel_fraction": 0.0,
+          "channel_rate_mean": 0.3386147916316986,
+          "channel_rate_std": 0.11418404430150986
+        }
+      ],
+      "_mean_by_layer": [
+        {
+          "layer": 0,
+          "firing_rate": 0.09124490949842666,
+          "silent_channel_fraction": 0.3115234375
+        },
+        {
+          "layer": 1,
+          "firing_rate": 0.007310019599066841,
+          "silent_channel_fraction": 0.7828776041666666
+        },
+        {
+          "layer": 2,
+          "firing_rate": 0.006111568874782986,
+          "silent_channel_fraction": 0.6591796875
+        },
+        {
+          "layer": 3,
+          "firing_rate": 0.001102659437391493,
+          "silent_channel_fraction": 0.9407552083333334
+        },
+        {
+          "layer": 4,
+          "firing_rate": 0.0038918389214409725,
+          "silent_channel_fraction": 0.9140625
+        },
+        {
+          "layer": 5,
+          "firing_rate": 0.017254723442925345,
+          "silent_channel_fraction": 0.6253255208333334
+        },
+        {
+          "layer": 6,
+          "firing_rate": 0.04426998562282986,
+          "silent_channel_fraction": 0.62890625
+        },
+        {
+          "layer": 7,
+          "firing_rate": 0.07069132063123916,
+          "silent_channel_fraction": 0.5006510416666666
+        },
+        {
+          "layer": 8,
+          "firing_rate": 0.11057652367485894,
+          "silent_channel_fraction": 0.2513020833333333
+        },
+        {
+          "layer": 9,
+          "firing_rate": 0.17238129509819877,
+          "silent_channel_fraction": 0.11881510416666667
+        },
+        {
+          "layer": 10,
+          "firing_rate": 0.24608431922064886,
+          "silent_channel_fraction": 0.010091145833333334
+        },
+        {
+          "layer": 11,
+          "firing_rate": 0.3877889845106337,
+          "silent_channel_fraction": 0.0
+        }
+      ]
+    }
+  },
+  "lif_parameters": {
+    "base_1b": [
+      {
+        "layer": 0,
+        "branch": "lif1",
+        "tau": 2.9758968353271484,
+        "threshold": 1.4563429355621338
+      },
+      {
+        "layer": 0,
+        "branch": "lif2",
+        "tau": 5.732229232788086,
+        "threshold": 0.0048790257424116135
+      },
+      {
+        "layer": 1,
+        "branch": "lif1",
+        "tau": 1.9694256782531738,
+        "threshold": 1.345626711845398
+      },
+      {
+        "layer": 1,
+        "branch": "lif2",
+        "tau": 4.30030632019043,
+        "threshold": 0.024977706372737885
+      },
+      {
+        "layer": 2,
+        "branch": "lif1",
+        "tau": 2.2465405464172363,
+        "threshold": 1.2054002285003662
+      },
+      {
+        "layer": 2,
+        "branch": "lif2",
+        "tau": 3.089508295059204,
+        "threshold": 0.19793038070201874
+      },
+      {
+        "layer": 3,
+        "branch": "lif1",
+        "tau": 2.3332295417785645,
+        "threshold": 1.0279560089111328
+      },
+      {
+        "layer": 3,
+        "branch": "lif2",
+        "tau": 2.2546567916870117,
+        "threshold": 0.16211658716201782
+      },
+      {
+        "layer": 4,
+        "branch": "lif1",
+        "tau": 3.075087070465088,
+        "threshold": 1.142897605895996
+      },
+      {
+        "layer": 4,
+        "branch": "lif2",
+        "tau": 2.643428087234497,
+        "threshold": 0.10905032604932785
+      },
+      {
+        "layer": 5,
+        "branch": "lif1",
+        "tau": 5.260314464569092,
+        "threshold": 1.118280291557312
+      },
+      {
+        "layer": 5,
+        "branch": "lif2",
+        "tau": 3.9139935970306396,
+        "threshold": 0.0613434836268425
+      },
+      {
+        "layer": 6,
+        "branch": "lif1",
+        "tau": 8.758576393127441,
+        "threshold": 0.9369668960571289
+      },
+      {
+        "layer": 6,
+        "branch": "lif2",
+        "tau": 2.2343852519989014,
+        "threshold": 0.13600008189678192
+      },
+      {
+        "layer": 7,
+        "branch": "lif1",
+        "tau": 10.276778221130371,
+        "threshold": 0.8195683360099792
+      },
+      {
+        "layer": 7,
+        "branch": "lif2",
+        "tau": 2.9854748249053955,
+        "threshold": 0.018057363107800484
+      },
+      {
+        "layer": 8,
+        "branch": "lif1",
+        "tau": 10.546845436096191,
+        "threshold": 0.7439118027687073
+      },
+      {
+        "layer": 8,
+        "branch": "lif2",
+        "tau": 4.105184555053711,
+        "threshold": 0.1653844118118286
+      },
+      {
+        "layer": 9,
+        "branch": "lif1",
+        "tau": 10.731827735900879,
+        "threshold": 0.6282950043678284
+      },
+      {
+        "layer": 9,
+        "branch": "lif2",
+        "tau": 3.5695366859436035,
+        "threshold": 1.1070806980133057
+      },
+      {
+        "layer": 10,
+        "branch": "lif1",
+        "tau": 10.659893989562988,
+        "threshold": 0.5389710664749146
+      },
+      {
+        "layer": 10,
+        "branch": "lif2",
+        "tau": 5.034520626068115,
+        "threshold": 0.6805852651596069
+      },
+      {
+        "layer": 11,
+        "branch": "lif1",
+        "tau": 10.84846019744873,
+        "threshold": 0.43580958247184753
+      },
+      {
+        "layer": 11,
+        "branch": "lif2",
+        "tau": 10.67973518371582,
+        "threshold": 0.6242542266845703
+      }
+    ],
+    "sft_v2": [
+      {
+        "layer": 0,
+        "branch": "lif1",
+        "tau": 2.9764821529388428,
+        "threshold": 1.4564646482467651
+      },
+      {
+        "layer": 0,
+        "branch": "lif2",
+        "tau": 5.737759590148926,
+        "threshold": 0.004854230210185051
+      },
+      {
+        "layer": 1,
+        "branch": "lif1",
+        "tau": 1.9695451259613037,
+        "threshold": 1.3454957008361816
+      },
+      {
+        "layer": 1,
+        "branch": "lif2",
+        "tau": 4.304730415344238,
+        "threshold": 0.024872109293937683
+      },
+      {
+        "layer": 2,
+        "branch": "lif1",
+        "tau": 2.2468819618225098,
+        "threshold": 1.2048718929290771
+      },
+      {
+        "layer": 2,
+        "branch": "lif2",
+        "tau": 3.0906119346618652,
+        "threshold": 0.19757021963596344
+      },
+      {
+        "layer": 3,
+        "branch": "lif1",
+        "tau": 2.3330252170562744,
+        "threshold": 1.0284478664398193
+      },
+      {
+        "layer": 3,
+        "branch": "lif2",
+        "tau": 2.2546439170837402,
+        "threshold": 0.16194453835487366
+      },
+      {
+        "layer": 4,
+        "branch": "lif1",
+        "tau": 3.0749897956848145,
+        "threshold": 1.1430766582489014
+      },
+      {
+        "layer": 4,
+        "branch": "lif2",
+        "tau": 2.6438868045806885,
+        "threshold": 0.10887670516967773
+      },
+      {
+        "layer": 5,
+        "branch": "lif1",
+        "tau": 5.2599687576293945,
+        "threshold": 1.119039535522461
+      },
+      {
+        "layer": 5,
+        "branch": "lif2",
+        "tau": 3.914504051208496,
+        "threshold": 0.06116098165512085
+      },
+      {
+        "layer": 6,
+        "branch": "lif1",
+        "tau": 8.761417388916016,
+        "threshold": 0.9367018938064575
+      },
+      {
+        "layer": 6,
+        "branch": "lif2",
+        "tau": 2.234414577484131,
+        "threshold": 0.13574489951133728
+      },
+      {
+        "layer": 7,
+        "branch": "lif1",
+        "tau": 10.280441284179688,
+        "threshold": 0.8193944692611694
+      },
+      {
+        "layer": 7,
+        "branch": "lif2",
+        "tau": 2.9855737686157227,
+        "threshold": 0.0179995596408844
+      },
+      {
+        "layer": 8,
+        "branch": "lif1",
+        "tau": 10.55013370513916,
+        "threshold": 0.7438313364982605
+      },
+      {
+        "layer": 8,
+        "branch": "lif2",
+        "tau": 4.106368064880371,
+        "threshold": 0.16489936411380768
+      },
+      {
+        "layer": 9,
+        "branch": "lif1",
+        "tau": 10.735700607299805,
+        "threshold": 0.6276857852935791
+      },
+      {
+        "layer": 9,
+        "branch": "lif2",
+        "tau": 3.570124387741089,
+        "threshold": 1.1070371866226196
+      },
+      {
+        "layer": 10,
+        "branch": "lif1",
+        "tau": 10.664203643798828,
+        "threshold": 0.5379393100738525
+      },
+      {
+        "layer": 10,
+        "branch": "lif2",
+        "tau": 5.036211967468262,
+        "threshold": 0.6803545355796814
+      },
+      {
+        "layer": 11,
+        "branch": "lif1",
+        "tau": 10.852766990661621,
+        "threshold": 0.43494170904159546
+      },
+      {
+        "layer": 11,
+        "branch": "lif2",
+        "tau": 10.684652328491211,
+        "threshold": 0.62352454662323
+      }
+    ]
+  },
+  "generations": {
+    "base_1b": {
+      "Почему русский язык сложен для языковых моделей?": "Почему русский язык сложен для языковых моделей?Какие формы обучения необходимы для изучения английского языка? С точки зрения языка в лингвистике можно разделить на число детей: и без каких-либо особенностей преподавания, а не для развития грамматики. При изучении языка",
+      "Объясни простыми словами, что такое нейроморфные вычисления.": "Объясни простыми словами, что такое нейроморфные вычисления.Но более половины таких состояний можно считать как сверхзвуковое или кинестетическое или физическое. А хотя это так, когда не существует единого мнения, что в конечном итоге представляется возможным, то есть объективность"
+    },
+    "sft_v2": {
+      "Почему русский язык сложен для языковых моделей?": "Почему русский язык сложен для языковых моделей?Он не имеет смысла по вкусу, но в этом мире он содержит множество других языков. Кроме того, многие люди могли использовать разные языки, которые использовали для него. Ноутбук, используемый в стиле",
+      "Объясни простыми словами, что такое нейроморфные вычисления.": "Объясни простыми словами, что такое нейроморфные вычисления.В принципе, это может быть различным для человека, который измеряется внутри тела. Если вы хотите изучить один из ключевых факторов риска развития рака легких, то вам нужно обратиться к специалисту или повысить"
+    }
+  }
+}

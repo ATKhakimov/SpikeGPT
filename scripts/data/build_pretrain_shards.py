@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import time
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional
 
@@ -120,7 +121,9 @@ def main() -> None:
     parser.add_argument("--tokens-per-shard", type=int, default=100_000_000)
     parser.add_argument("--dtype", choices=["auto", "uint16", "uint32"], default="auto")
     parser.add_argument("--dedup", choices=["none", "memory"], default="memory")
+    parser.add_argument("--near-dedup", choices=["none", "simhash"], default=None)
     parser.add_argument("--max-docs-per-source", type=int, default=None)
+    parser.add_argument("--progress-docs", type=int, default=1000)
     parser.add_argument("--manifest", default=None)
     args = parser.parse_args()
 
@@ -138,7 +141,10 @@ def main() -> None:
     writer = ShardWriter(Path(args.output_dir), args.prefix, dtype, args.tokens_per_shard)
     quotas = weighted_quota(max_tokens, sources)
     seen = set() if args.dedup == "memory" else None
+    near_dedup = args.near_dedup or defaults.get("near_dedup", "none")
+    seen_simhashes = {} if near_dedup == "simhash" else None
     source_reports = []
+    started_at = time.monotonic()
 
     try:
         for source in sources:
@@ -146,9 +152,17 @@ def main() -> None:
             quota = quotas[name]
             source_tokens = 0
             source_docs = 0
+            filter_stats: Dict[str, int] = {}
+            source_started_at = time.monotonic()
             print(f"[pretrain] {name}: quota={quota:,} tokens", flush=True)
 
-            for text, meta in iter_clean_texts(source, defaults, seen_hashes=seen):
+            for text, meta in iter_clean_texts(
+                source,
+                defaults,
+                seen_hashes=seen,
+                seen_simhashes=seen_simhashes,
+                stats=filter_stats,
+            ):
                 ids = tokenizer.encode(text)
                 if not ids:
                     continue
@@ -161,9 +175,18 @@ def main() -> None:
 
                 if args.max_docs_per_source and source_docs >= args.max_docs_per_source:
                     break
-                if source_docs % 10000 == 0:
+                if args.progress_docs > 0 and source_docs % args.progress_docs == 0:
+                    elapsed = max(time.monotonic() - source_started_at, 1e-9)
+                    total_elapsed = max(time.monotonic() - started_at, 1e-9)
+                    source_pct = 100.0 * source_tokens / quota if quota else 100.0
+                    total_pct = 100.0 * writer.total_tokens / max_tokens if max_tokens else 100.0
                     print(
-                        f"  {name}: docs={source_docs:,} tokens={source_tokens:,}/{quota:,}",
+                        "  "
+                        f"{name}: docs={source_docs:,} "
+                        f"tokens={source_tokens:,}/{quota:,} ({source_pct:.1f}%) "
+                        f"total={writer.total_tokens:,}/{max_tokens:,} ({total_pct:.1f}%) "
+                        f"source_tok/s={source_tokens / elapsed:,.0f} "
+                        f"total_tok/s={writer.total_tokens / total_elapsed:,.0f}",
                         flush=True,
                     )
 
@@ -176,6 +199,7 @@ def main() -> None:
                     "quota_tokens": quota,
                     "written_tokens": source_tokens,
                     "documents": source_docs,
+                    "filter_stats": filter_stats,
                 }
             )
     finally:
@@ -190,6 +214,8 @@ def main() -> None:
         "max_tokens": max_tokens,
         "written_tokens": writer.total_tokens,
         "tokens_per_shard": args.tokens_per_shard,
+        "dedup": args.dedup,
+        "near_dedup": near_dedup,
         "sources": source_reports,
         "shards": shards,
     }

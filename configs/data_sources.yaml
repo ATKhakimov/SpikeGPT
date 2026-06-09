@@ -5,9 +5,21 @@ defaults:
   text_fields: ["text"]
   min_chars: 200
   max_chars: 20000
+  chunk_long_documents: true
+  chunk_chars: 16000
+  chunk_overlap_chars: 0
   min_cyrillic_ratio: 0.45
+  min_alpha_ratio: 0.45
+  max_digit_ratio: 0.25
+  max_punctuation_ratio: 0.30
   max_repeated_line_fraction: 0.35
+  max_short_line_fraction: 0.45
   max_url_count: 12
+  max_email_count: 8
+  max_phone_count: 8
+  min_unique_word_fraction: 0.18
+  near_dedup: simhash
+  simhash_threshold: 3
   trust_remote_code: false
 
 tokenizer_sample:
@@ -38,6 +50,7 @@ tokenizer_sample:
       split: train
       weight: 0.15
       text_fields: ["text"]
+      chunk_chars: 18000
       license_note: Check Wikimedia attribution/share-alike requirements.
 
     - name: taiga_proza
@@ -46,6 +59,7 @@ tokenizer_sample:
       split: train
       weight: 0.10
       text_fields: ["text"]
+      chunk_chars: 18000
       license_note: Check dataset card and source licenses.
 
     - name: taiga_rest
@@ -61,7 +75,7 @@ tokenizer_sample:
       dataset: IlyaGusev/habr
       split: train
       weight: 0.05
-      text_fields: ["text"]
+      text_fields: ["text_markdown", "lead_markdown"]
       license_note: Check article-source terms before release.
 
     - name: russian_pd
@@ -70,6 +84,7 @@ tokenizer_sample:
       split: train
       weight: 0.05
       text_fields: ["text", "content"]
+      chunk_chars: 18000
       license_note: Public-domain corpus; still keep source attribution metadata.
 
 pretrain_mix:
@@ -106,6 +121,7 @@ pretrain_mix:
       split: train
       weight: 0.05
       text_fields: ["text"]
+      chunk_chars: 18000
 
     - name: taiga_lenta
       kind: hf
@@ -121,6 +137,7 @@ pretrain_mix:
       split: train
       weight: 0.06
       text_fields: ["text"]
+      chunk_chars: 18000
 
     - name: russian_pd
       kind: hf
@@ -128,13 +145,14 @@ pretrain_mix:
       split: train
       weight: 0.04
       text_fields: ["text", "content"]
+      chunk_chars: 18000
 
     - name: habr
       kind: hf
       dataset: IlyaGusev/habr
       split: train
       weight: 0.025
-      text_fields: ["text"]
+      text_fields: ["text_markdown", "lead_markdown"]
 
     - name: wikiomnia
       kind: hf
@@ -202,7 +220,7 @@ validation_splits:
         dataset: IlyaGusev/habr
         split: train
         weight: 1.0
-        text_fields: ["text"]
+        text_fields: ["text_markdown", "lead_markdown"]
 
   - name: val_mixed
     target_tokens: 10000000
@@ -238,37 +256,62 @@ validation_splits:
         dataset: IlyaGusev/habr
         split: train
         weight: 0.10
-        text_fields: ["text"]
+        text_fields: ["text_markdown", "lead_markdown"]
 
 sft_mix:
-  target_examples: 100000
+  target_examples: 70000
   output: data/sft/spikerugpt_sft_mix.jsonl
   sources:
     - name: saiga_scored
       kind: hf
       dataset: IlyaGusev/saiga_scored
       split: train
-      weight: 0.35
+      weight: 0.29
       min_score: 7.0
-      score_fields: ["score", "rating"]
+      score_fields: ["score", "rating", "opus_score"]
+      language_field: language
+      language_values: ["Russian", "ru", "rus"]
       instruction_fields: ["instruction", "prompt", "question"]
       input_fields: ["input", "context"]
       output_fields: ["output", "response", "answer"]
+      min_user_chars: 5
+      max_user_chars: 300
+      min_assistant_chars: 60
+      max_assistant_chars: 1200
 
     - name: russian_instructions
       kind: hf
       dataset: Den4ikAI/russian_instructions
       split: train
-      weight: 0.20
+      weight: 0.26
+      dialogue_field: dialogue
       instruction_fields: ["instruction", "prompt", "question"]
       input_fields: ["input", "context"]
       output_fields: ["output", "response", "answer"]
+      min_user_chars: 5
+      max_user_chars: 300
+      min_assistant_chars: 40
+      max_assistant_chars: 1200
+
+    - name: russian_easy_instructions
+      kind: hf
+      dataset: attn-signs/russian-easy-instructions
+      split: train
+      weight: 0.26
+      dialogue_field: conversation
+      instruction_fields: ["instruction", "prompt", "question"]
+      output_fields: ["answer", "output", "response"]
+      min_user_chars: 5
+      max_user_chars: 180
+      min_assistant_chars: 80
+      max_assistant_chars: 1200
 
     - name: aya_ru
       kind: hf
       dataset: CohereLabs/aya_dataset
       split: train
-      weight: 0.10
+      weight: 0.0
+      enabled: false
       language_field: language_code
       language_values: ["rus", "ru"]
       instruction_fields: ["inputs", "instruction", "prompt"]
@@ -277,10 +320,48 @@ sft_mix:
     - name: oasst1_ru_main_branch
       kind: hf
       dataset: IlyaGusev/oasst1_ru_main_branch
+      data_files: "hf://datasets/IlyaGusev/oasst1_ru_main_branch/oasst1_ru_main_branch.jsonl"
       split: train
-      weight: 0.10
+      weight: 0.0
       enabled: false
-      notes: Enable after schema inspection; may need conversation-tree adapter.
+      dialogue_field: messages
+      instruction_fields: ["instruction", "prompt", "question"]
+      input_fields: ["input", "context"]
+      output_fields: ["output", "response", "answer"]
+      min_user_chars: 5
+      max_user_chars: 300
+      min_assistant_chars: 60
+      max_assistant_chars: 1200
+
+    - name: ru_turbo_alpaca
+      kind: hf
+      dataset: IlyaGusev/ru_turbo_alpaca
+      data_files: "hf://datasets/IlyaGusev/ru_turbo_alpaca/ru_turbo_alpaca.jsonl.zst"
+      split: train
+      weight: 0.07
+      instruction_fields: ["instruction", "prompt", "question"]
+      input_fields: ["input", "context"]
+      output_fields: ["output", "response", "answer"]
+      min_user_chars: 5
+      max_user_chars: 300
+      min_assistant_chars: 60
+      max_assistant_chars: 1200
+      notes: ChatGPT-generated; keep as a moderate-weight source, not the public-release foundation.
+
+    - name: ru_turbo_saiga
+      kind: hf
+      dataset: IlyaGusev/ru_turbo_saiga
+      data_files: "hf://datasets/IlyaGusev/ru_turbo_saiga/ru_turbo_saiga.jsonl.zst"
+      split: train
+      weight: 0.03
+      instruction_fields: ["instruction", "prompt", "question"]
+      input_fields: ["input", "context"]
+      output_fields: ["output", "response", "answer"]
+      min_user_chars: 5
+      max_user_chars: 300
+      min_assistant_chars: 60
+      max_assistant_chars: 1200
+      notes: ChatGPT-generated; keep as a moderate-weight source, not the public-release foundation.
 
     - name: wikiomnia
       kind: hf
